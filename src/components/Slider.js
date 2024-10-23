@@ -9,10 +9,15 @@ import React from "react";
 import balloonIcon from "../../assets/image/balloonIcon.png";
 import Carousel from "react-native-snap-carousel";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import { useTheme } from "../utils/Context";
+import { lightTheme, darkTheme } from "../utils/Theme";
 
 const { width, height } = Dimensions.get("window");
 
 export default function Slider({ data }) {
+  const { isDarkMode } = useTheme();
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   const renderItem = ({ item, index }) => {
     return (
       <TouchableWithoutFeedback>
@@ -28,8 +33,8 @@ export default function Slider({ data }) {
             }}
             resizeMode="cover"
           />
-          <Text className="text-neutral-300 ml-1 text-lg font-bold">
-            {item.name.length > 16 ? item.name.slice(0, 16) + "..." : item.name}
+          <Text className="ml-1 text-lg font-bold" style={theme.text}>
+            {item.name.length > 24 ? item.name.slice(0, 24) + "..." : item.name}
           </Text>
         </View>
       </TouchableWithoutFeedback>
@@ -41,7 +46,7 @@ export default function Slider({ data }) {
       <View className="flex-row justify-between items-center mb-2">
         <View className="flex-row items-center">
           <Image source={balloonIcon} className="w-8 h-8" />
-          <Text className="ml-2 font-semibold text-lg ">
+          <Text className="ml-2 font-semibold text-lg" style={theme.text}>
             Truyện mới cập nhập
           </Text>
         </View>
@@ -55,6 +60,7 @@ export default function Slider({ data }) {
         contentContainerStyle={{ paddingHorizontal: 15 }}
         sliderWidth={width}
         itemWidth={width * 0.7}
+        loop={true}
       />
     </View>
   );
