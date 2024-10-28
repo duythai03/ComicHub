@@ -13,9 +13,9 @@ export const lightTheme = StyleSheet.create({
 export const darkTheme = StyleSheet.create({
   container: {
     backgroundColor: "#232531",
-    color: "#fff",
+    color: "#e0e0e0",
   },
   text: {
-    color: "#fff",
+    color: "#e0e0e0",
   },
 });

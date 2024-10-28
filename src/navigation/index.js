@@ -7,12 +7,18 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import GenreScreen from "../screens/GenreScreen";
+import { useTheme } from "../utils/Context";
+import { lightTheme, darkTheme } from "../utils/Theme";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function AppNavigation() {
+  const { isDarkMode } = useTheme();
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   function HomeStack() {
     return (
       <Stack.Navigator
@@ -32,25 +38,26 @@ export default function AppNavigation() {
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
+          tabBarStyle: { backgroundColor: theme.container.backgroundColor },
+          tabBarActiveTintColor: "#c226f1",
+          tabBarInactiveTintColor: theme.text.color,
           tabBarIcon: ({ color, size }) => {
             let iconName;
 
             if (route.name === "Home") {
-              iconName = "home";
-            } else if (route.name === "Search") {
-              iconName = "search";
+              iconName = "house";
+            } else if (route.name === "Genre") {
+              iconName = "book-open";
             } else if (route.name === "Profile") {
               iconName = "user";
             }
 
-            return <FontAwesome name={iconName} size={size} color={color} />;
+            return <FontAwesome6 name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="Genre" component={GenreScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     );
