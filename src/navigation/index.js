@@ -45,7 +45,7 @@ export default function AppNavigation() {
     return (
       <Stack.Navigator
         screenOptions={{
-          headerShown: true,
+          headerShown: false,
         }}
         initialRouteName="Comic"
       >

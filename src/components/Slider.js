@@ -11,6 +11,7 @@ import Carousel from "react-native-snap-carousel";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useTheme } from "../utils/Context";
 import { lightTheme, darkTheme } from "../utils/Theme";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 const widthImg = width * 0.7;
@@ -19,6 +20,7 @@ const heightImg = height * 0.2;
 export default function Slider({ data }) {
   const { isDarkMode } = useTheme();
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const navigation = useNavigation();
 
   const renderItem = ({ item, index }) => {
     if (!item) return null;
@@ -35,7 +37,9 @@ export default function Slider({ data }) {
         : "N/A";
 
     return (
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate("ComicStack", { comic: item })}
+      >
         <View key={index} className="space-y-1 mr-4">
           <View
             style={{
