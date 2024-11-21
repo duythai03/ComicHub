@@ -21,7 +21,19 @@ export default function Slider({ data }) {
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   const renderItem = ({ item, index }) => {
+    if (!item) return null;
     const actualIndex = index % data.length;
+
+    const thumbnail = item.thumb_url
+      ? `https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`
+      : "https://placeholder.com/placeholder.png";
+
+    const name = item.name || "Unknown Title";
+    const chapter =
+      item.chaptersLatest && item.chaptersLatest[0]
+        ? item.chaptersLatest[0].chapter_name
+        : "N/A";
+
     return (
       <TouchableWithoutFeedback>
         <View key={index} className="space-y-1 mr-4">
@@ -34,9 +46,7 @@ export default function Slider({ data }) {
             }}
           >
             <Image
-              source={{
-                uri: `https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`,
-              }}
+              source={{ uri: thumbnail }}
               className="w-full h-full rounded-2xl"
               resizeMode="cover"
             />
@@ -45,13 +55,11 @@ export default function Slider({ data }) {
               style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
             >
               <Text className="ml-4 mt-2 text-base font-bold text-white">
-                {item.name.length > 24
-                  ? item.name.slice(0, 24) + "..."
-                  : item.name}
+                {name.length > 24 ? name.slice(0, 24) + "..." : name}
               </Text>
               <View className="px-4 flex-row justify-between items-center">
                 <Text className="text-sm text-white font-bold">
-                  Chapter: {item.chaptersLatest[0].chapter_name}
+                  Chapter: {chapter}
                 </Text>
                 <View className="flex-row items-center">
                   <AntDesign name="star" size={16} color="#f1b207" />

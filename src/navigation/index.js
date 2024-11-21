@@ -9,6 +9,8 @@ import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import GenreScreen from "../screens/GenreScreen";
+import ComicScreen from "../screens/ComicScreen";
+import ReadingScreen from "../screens/ReadingScreen";
 import { useTheme } from "../utils/Context";
 import { lightTheme, darkTheme } from "../utils/Theme";
 
@@ -29,6 +31,30 @@ export default function AppNavigation() {
       >
         <Stack.Screen name="HomeTab" component={HomeTab} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen
+          name="Search"
+          component={SearchScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen name="ComicStack" component={ComicStack} />
+      </Stack.Navigator>
+    );
+  }
+
+  function ComicStack({ route }) {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: true,
+        }}
+        initialRouteName="Comic"
+      >
+        <Stack.Screen
+          name="Comic"
+          component={ComicScreen}
+          initialParams={route?.params}
+        />
+        <Stack.Screen name="Reading" component={ReadingScreen} />
       </Stack.Navigator>
     );
   }

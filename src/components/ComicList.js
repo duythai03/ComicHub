@@ -1,21 +1,27 @@
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useTheme } from "../utils/Context";
 import { lightTheme, darkTheme } from "../utils/Theme";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ComicList({ title, data }) {
   const { isDarkMode } = useTheme();
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const navigation = useNavigation();
+
   const renderItem = ({ item }) => {
     return (
       <View className="mr-3">
-        <View
+        <TouchableOpacity
           style={{
             width: 120,
             height: 180,
             borderRadius: 10,
             position: "relative",
+          }}
+          onPress={() => {
+            navigation.navigate("ComicStack", { comic: item });
           }}
         >
           <Image
@@ -25,7 +31,7 @@ export default function ComicList({ title, data }) {
             className="w-full h-full rounded-2xl"
             resizeMode="cover"
           />
-        </View>
+        </TouchableOpacity>
         <Text
           className="mt-1 text-sm font-semibold text-center"
           style={theme.text}

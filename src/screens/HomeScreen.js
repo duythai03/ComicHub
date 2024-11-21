@@ -14,6 +14,7 @@ import { lightTheme, darkTheme } from "../utils/Theme";
 import { useTheme } from "../utils/Context";
 import ComicList from "../components/ComicList";
 import LoadingCircle from "../components/LoadingCircle";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen() {
   const [truyenMoi, setTruyenMoi] = useState([]);
@@ -22,6 +23,7 @@ export default function HomeScreen() {
   const [truyenSapRaMat, setTruyenSapRaMat] = useState([]);
   const { isDarkMode } = useTheme();
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const navigation = useNavigation();
 
   const { isLoading: isTruyenMoiLoading } = useQuery({
     queryKey: ["truyenMoi"],
@@ -96,6 +98,7 @@ export default function HomeScreen() {
                 top: "50%",
                 transform: [{ translateY: -17 }],
               }}
+              onPress={() => navigation.navigate("Search")}
             />
           </View>
           <View className="-translate-y-2">
