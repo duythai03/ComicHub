@@ -23,6 +23,7 @@ export default function HomeScreen() {
 	const [truyenSapRaMat, setTruyenSapRaMat] = useState([]);
 	const { isDarkMode } = useTheme();
 	const theme = isDarkMode ? darkTheme : lightTheme;
+
 	const navigation = useNavigation();
 
 	const { isLoading: isTruyenMoiLoading } = useQuery({
@@ -77,7 +78,7 @@ export default function HomeScreen() {
 
 	return (
 		<View className="flex-1" style={theme.container}>
-			<ScrollView className="mt-14 mx-2" showsVerticalScrollIndicator={false}>
+			<ScrollView className="mx-2" showsVerticalScrollIndicator={false}>
 				<View className="flex-row justify-between items-center">
 					<View className="relative w-[80%] mb-4">
 						<TextInput

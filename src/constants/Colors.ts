@@ -1,27 +1,79 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 const tintColorLight = "#0a7ea4";
 const tintColorDark = "#fff";
 
 export const Colors = {
 	light: {
-		text: "#11181C",
-		background: "#fff",
-		tint: tintColorLight,
-		icon: "#687076",
-		tabIconDefault: "#687076",
-		tabIconSelected: tintColorLight,
+		// Primary and Secondary colors
+		primary: "#6200EE", // Primary color (main brand color)
+		primaryLight: "#9B47F4", // Lighter shade of primary color
+		primaryDark: "#3700B3", // Darker shade of primary color
+		secondary: "#03DAC6", // Secondary color (accent color)
+		secondaryLight: "#6EFFD0", // Lighter shade of secondary color
+		secondaryDark: "#018786", // Darker shade of secondary color
+
+		// Background and Surface
+		background: "#FFFFFF", // Main background color of the app
+		surface: "#F4F4F4", // Background color for surfaces like cards, tables
+		elevatedSurface: "#FFFFFF", // Surface color for elevated components (e.g., dialogs)
+
+		// Text
+		text: "#11181C", // Primary text color
+		onPrimary: "#FFFFFF", // Text color on primary color elements
+		onSecondary: "#000000", // Text color on secondary color elements
+		onBackground: "#000000", // Text color on background color elements
+		onSurface: "#000000", // Text color on surface color elements
+		placeholder: "#9BA1A6", // Placeholder text color
+
+		// Error and Alerts
+		error: "#B00020", // Error color for alerts and messages
+		onError: "#FFFFFF", // Text color on error color elements
+
+		// Border and Dividers
+		border: "#E5E7EB", // Border color for components like TextInput, Button
+
+		// Other
+		icon: "#687076", // Icon color
+		notification: "#FF5252", // Error message color
+		success: "#4CAF50", // Success message color
+		warning: "#FF9800", // Warning message color
+		disabled: "#E0E0E0", // Disabled state color
 	},
+
 	dark: {
-		text: "#ECEDEE",
-		background: "#151718",
-		tint: tintColorDark,
-		icon: "#9BA1A6",
-		tabIconDefault: "#9BA1A6",
-		tabIconSelected: tintColorDark,
+		// Primary and Secondary colors
+		primary: "#BB86FC", // Primary color (main brand color)
+		primaryLight: "#3700B3", // Lighter shade of primary color
+		primaryDark: "#6200EE", // Darker shade of primary color
+		secondary: "#03DAC6", // Secondary color (accent color)
+		secondaryLight: "#6EFFD0", // Lighter shade of secondary color
+		secondaryDark: "#018786", // Darker shade of secondary color
+
+		// Background and Surface
+		background: "#121212", // Main background color of the app (dark theme)
+		surface: "#2A2D30", // Background color for surfaces like cards, tables
+		elevatedSurface: "#121212", // Surface color for elevated components (e.g., dialogs)
+
+		// Text
+		text: "#ECEDEE", // Primary text color
+		onPrimary: "#000000", // Text color on primary color elements
+		onSecondary: "#000000", // Text color on secondary color elements
+		onBackground: "#ECEDEE", // Text color on background color elements
+		onSurface: "#ECEDEE", // Text color on surface color elements
+		placeholder: "#2A2D30", // Placeholder text color
+
+		// Error and Alerts
+		error: "#CF6679", // Error color for alerts and messages
+		onError: "#000000", // Text color on error color elements
+
+		// Border and Dividers
+		border: "#797f94",
+
+		// Other
+		icon: "#9BA1A6", // Icon color
+		notification: "#FF5252", // Error message color
+		success: "#4CAF50", // Success message color
+		warning: "#FF9800", // Warning message color
+		disabled: "#6E6E6E", // Disabled state color
 	},
 };
 
