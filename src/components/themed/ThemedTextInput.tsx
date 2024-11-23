@@ -10,10 +10,11 @@ export type ThemedTextInputProps = TextInputProps & {
 	darkColor?: string;
 	lightPlaceholderTextColor?: string;
 	darkPlaceholderTextColor?: string;
-	type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
 };
 
 export default function ThemedTextInput({
+	value,
+	onChangeText,
 	style,
 	lightBorderColor,
 	darkBorderColor,
@@ -44,17 +45,16 @@ export default function ThemedTextInput({
 
 	return (
 		<TextInput
+			value={value}
+			onChangeText={onChangeText}
 			style={[
-				style,
 				{
 					borderWidth: 1,
-					borderRadius: 5,
 					borderColor,
 					backgroundColor,
-					padding: 10,
-					margin: 5,
 					color,
 				},
+				style,
 			]}
 			{...props}
 			placeholderTextColor={placeholderTextColor}

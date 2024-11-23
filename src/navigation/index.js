@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -13,9 +12,8 @@ import ReadingScreen from "../screens/ReadingScreen";
 import { useTheme } from "../utils/Context";
 import { lightTheme, darkTheme } from "../utils/Theme";
 import LoginScreen from "@/screens/authentication/LoginScreen";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import { useThemeColor } from "@/hooks/theme/useThemeColor";
 import WelcomeScreen from "@/screens/WelcomeScreen";
+import { RegisterScreen } from "@/screens/authentication";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,10 +29,12 @@ export default function AppNavigation() {
 				screenOptions={{
 					headerShown: false,
 				}}
-				initialRouteName="Welcome"
+				initialRouteName="LoginScreen"
 			>
 				<Stack.Screen name="HomeTab" component={HomeTab} />
-				<Stack.Screen name="Welcome" component={LoginScreen} />
+				<Stack.Screen name="Welcome" component={WelcomeScreen} />
+				<Stack.Screen name="LoginScreen" component={LoginScreen} />
+				<Stack.Screen name="RegisterScreen" component={RegisterScreen} />
 				<Stack.Screen
 					name="Search"
 					component={SearchScreen}
