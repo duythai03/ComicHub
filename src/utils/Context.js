@@ -1,21 +1,18 @@
-import { useState, createContext, useContext } from "react";
-import { useColorScheme } from "react-native";
+import { useThemeContext } from "@/hooks/theme/ThemeContext";
+import { createContext, useContext } from "react";
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const systemTheme = useColorScheme();
-  const [isDarkMode, setIsDarkMode] = useState(systemTheme === "dark");
+	const { isDarkMode, toggleDarkTheme } = useThemeContext();
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
-  return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+	return (
+		<ThemeContext.Provider
+			value={{ isDarkMode: isDarkMode, toggleTheme: toggleDarkTheme }}
+		>
+			{children}
+		</ThemeContext.Provider>
+	);
 };
 
 export const useTheme = () => useContext(ThemeContext);
