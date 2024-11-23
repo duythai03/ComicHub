@@ -1,5 +1,4 @@
 import { ThemedText } from "@/components/themed/ThemedText";
-import ThemedTextInput from "@/components/themed/ThemedTextInput";
 import { ThemedView } from "@/components/themed/ThemedView";
 import logo from "R/logo.jpg";
 import { Image } from "react-native";
@@ -59,13 +58,7 @@ function RegisterScreen() {
 	};
 
 	return (
-		<ThemedView
-			className="flex-1 justify-center items-center px-4"
-			style={{
-				backgroundColor: "transparent",
-				background: "linear-gradient(to bottom, #4C6EF5, #5F92F1)",
-			}}
-		>
+		<ThemedView className="flex-1 justify-center items-center px-4">
 			<Image
 				source={logo}
 				style={{
@@ -124,11 +117,9 @@ function RegisterScreen() {
 
 			<TouchableOpacity
 				onPress={handleRegister}
-				className="w-full p-4 rounded-xl bg-blue-500 items-center mb-6"
+				className="w-full p-4 rounded-xl items-center mb-6"
 			>
-				<ThemedText className="text-lg font-semibold text-white">
-					Đăng ký
-				</ThemedText>
+				<ThemedText className="text-lg font-semibold">Đăng ký</ThemedText>
 			</TouchableOpacity>
 
 			<ThemedView className="flex-row items-center justify-center">

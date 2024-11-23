@@ -30,7 +30,7 @@ export default function ThemedValidTextInput({
 		marginHorizontal,
 		marginVertical,
 		...inputStyle
-	} = Object.assign({}, ...(style as Style[]).filter(Boolean)) as Style;
+	} = (Object.assign({}, ...(style as Style[]).filter(Boolean)) as Style) || {};
 
 	return (
 		<ThemedView
