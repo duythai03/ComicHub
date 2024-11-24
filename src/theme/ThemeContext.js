@@ -1,11 +1,11 @@
 import React, { createContext, useCallback, useContext } from "react";
 import { useColorScheme } from "./useColorScheme";
-import { Colors } from "@/constants/Colors";
-// import {
-// 	DarkTheme,
-// 	DefaultTheme,
-// 	ThemeProvider as ThemeProviderDefault,
-// } from "@react-navigation/native";
+import {
+	DarkTheme,
+	DefaultTheme,
+	ThemeProvider as ThemeProviderDefault,
+} from "@react-navigation/native";
+import { Colors } from "./Colors";
 
 const ThemeContext = createContext();
 
@@ -30,7 +30,9 @@ export const ThemeProvider = ({ children }) => {
 				colors: Colors[theme],
 			}}
 		>
-			{children}
+			<ThemeProviderDefault value={(isDarkMode && DarkTheme) || DefaultTheme}>
+				{children}
+			</ThemeProviderDefault>
 		</ThemeContext.Provider>
 	);
 };

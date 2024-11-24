@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+import { Colors } from "./Colors";
 import { useThemeContext } from "./ThemeContext";
 
 export function useTheme() {

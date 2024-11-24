@@ -31,17 +31,20 @@
  * - If `useColorScheme()` returns `null`, the default scheme is considered `light`.
  *
  */
-import { ThemeKey, ThemeName, ThemeType } from "@/constants/Colors";
+import { ThemeKey, ThemeName, ThemeType } from "./Colors";
 import { useThemeContext } from "./ThemeContext";
 
-export function useThemeColor(
-	colorKey?: ThemeKey,
+export function useThemeColor<
+	T extends ThemeKey | undefined = undefined, // Default to undefined if not specified
+>(
+	colorKey?: T,
 	props?: Partial<Record<ThemeName, string>>,
-): string | ThemeType {
+): T extends undefined ? ThemeType : string {
 	const { theme, colors }: { theme: ThemeName; colors: ThemeType } =
 		useThemeContext();
 
-	if (!colorKey) return colors;
-	else if (!props) return colors[colorKey];
-	return props[theme] ?? colors[colorKey];
+	if (!colorKey)
+		return colors as any; // `colors` is ThemeType
+	else if (!props) return colors[colorKey] as any; // `colors[colorKey]` is string
+	return (props[theme] as any) ?? colors[colorKey]; // Custom or default color
 }
