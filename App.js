@@ -6,6 +6,10 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useThemeColor } from "@/theme/useThemeColor";
 import { ThemeProvider as ThemeProviderV2 } from "@/theme/ThemeContext";
+import Toast from "react-native-toast-message";
+import { UserProvider } from "@/contexts/UserContext";
+import { Suspense } from "react";
+import LoadingCircle from "@/components/LoadingCircle";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +37,10 @@ export default function App() {
 		<QueryClientProvider client={queryClient}>
 			<ThemeProviderV2>
 				<ThemeProviderV1>
-					<SafeApp />
+					<UserProvider>
+						<SafeApp />
+						<Toast />
+					</UserProvider>
 				</ThemeProviderV1>
 			</ThemeProviderV2>
 		</QueryClientProvider>

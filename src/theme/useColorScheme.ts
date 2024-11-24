@@ -4,6 +4,7 @@ import {
 } from "react-native";
 import { useState, useEffect, useCallback, useLayoutEffect } from "react";
 import AppAsyncStorage from "@/utils/AppAsyncStorage";
+import { StorageKey } from "@/constants/AppProperties";
 
 async function getStoredTheme() {
 	try {
@@ -28,9 +29,10 @@ export function useColorScheme(
 	const changeTheme = useCallback(
 		(theme: string) => {
 			// no need to wait because it's not critical
-			AppAsyncStorage.setItem("theme", theme);
+			AppAsyncStorage.setItem(StorageKey.THEME, theme);
 			setIsSetThemeAttempted(true);
 			setTheme(theme);
+			return theme;
 		},
 		[theme],
 	);
@@ -38,7 +40,10 @@ export function useColorScheme(
 	useLayoutEffect(() => {
 		const fetchTheme = async () => {
 			const storedTheme = await getStoredTheme();
-			if (storedTheme) changeTheme(storedTheme); // The user stored theme so no need to check the system changed anymore
+			if (storedTheme) {
+				setTheme(storedTheme);
+				setIsSetThemeAttempted(true);
+			} // The user stored theme so no need to check the system changed anymore
 		};
 		fetchTheme();
 	}, []);

@@ -1,5 +1,5 @@
 import { View, ScrollView, TextInput } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
 import Slider from "../components/Slider";
 import { useQuery } from "@tanstack/react-query";

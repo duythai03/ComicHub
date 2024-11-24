@@ -19,14 +19,12 @@ function RegisterScreen() {
 	const {
 		value: name,
 		onChangeText: onNameChange,
-		errored: nameErrored,
 		errorMessage: nameErrorMessage,
 		validate: validateName,
 	} = useValidation("", [Required, MinLength(2)]);
 	const {
 		value: username,
 		onChangeText: onUsernameChange,
-		errored: usernameErrored,
 		errorMessage: usernameErrorMessage,
 		validate: validateUsername,
 	} = useValidation("", [Required, MinLength(2)]);
@@ -34,14 +32,12 @@ function RegisterScreen() {
 	const {
 		value: password,
 		onChangeText: onPasswordChange,
-		errored: passwordErrored,
 		errorMessage: passwordErrorMessage,
 		validate: validatePassword,
 	} = useValidation("", [Required, Password]);
 	const {
 		value: passwordConfirm,
 		onChangeText: onpasswordConfirmChange,
-		errored: passwordConfirmErrored,
 		errorMessage: passwordConfirmErrorMessage,
 		validate: validatePasswordConfirm,
 	} = useValidation("", [
@@ -83,7 +79,6 @@ function RegisterScreen() {
 			<ThemedValidTextInput
 				value={name}
 				onChangeText={onNameChange}
-				errored={nameErrored}
 				errorMessage={nameErrorMessage}
 				placeholder="Họ và Tên"
 				className="w-full p-4 rounded-xl mb-4"
@@ -93,7 +88,6 @@ function RegisterScreen() {
 			<ThemedValidTextInput
 				value={username}
 				onChangeText={onUsernameChange}
-				errored={usernameErrored}
 				errorMessage={usernameErrorMessage}
 				placeholder="UserName"
 				keyboardType="email-address"
@@ -105,7 +99,6 @@ function RegisterScreen() {
 			<ThemedValidTextInput
 				value={password}
 				onChangeText={onPasswordChange}
-				errored={passwordErrored}
 				errorMessage={passwordErrorMessage}
 				placeholder="Mật khẩu"
 				secureTextEntry
@@ -116,7 +109,6 @@ function RegisterScreen() {
 			<ThemedValidTextInput
 				value={passwordConfirm}
 				onChangeText={onpasswordConfirmChange}
-				errored={passwordConfirmErrored}
 				errorMessage={passwordConfirmErrorMessage}
 				placeholder="Xác nhận mật khẩu"
 				secureTextEntry

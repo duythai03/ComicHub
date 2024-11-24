@@ -62,6 +62,7 @@ export default function useValidation(
 		onChangeText,
 		errored: errorMessage !== null,
 		errorMessage,
+		setErrorMessage,
 
 		// You can call this to validate it late if lazy is set to true,
 		validate: (v: string) => validate(v || value),
