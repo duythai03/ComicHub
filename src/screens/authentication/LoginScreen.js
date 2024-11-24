@@ -5,8 +5,8 @@ import { Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { ThemedValidTextInput } from "@/components/themed";
-import { isRequired, useValidation } from "@/hooks/validation";
-import { allValid, validateAll } from "@/hooks/validation/useValidation";
+import { Required, useValidation } from "@/hooks/validation";
+import { validateAll } from "@/hooks/validation/useValidation";
 
 function LoginScreen() {
 	const navigation = useNavigation();
@@ -16,7 +16,7 @@ function LoginScreen() {
 		errored: usernameErrored,
 		errorMessage: usernameErrorMessage,
 		validate: validateUsername,
-	} = useValidation("", [isRequired]);
+	} = useValidation("", [Required]);
 
 	const {
 		value: password,
@@ -24,7 +24,7 @@ function LoginScreen() {
 		errored: passwordErrored,
 		errorMessage: passwordErrorMessage,
 		validate: validatePassword,
-	} = useValidation("", [isRequired]);
+	} = useValidation("", [Required]);
 
 	const handleLogin = () => {
 		// validate as least as one

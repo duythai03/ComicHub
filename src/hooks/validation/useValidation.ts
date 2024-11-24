@@ -1,11 +1,18 @@
 import { useState } from "react";
 
-export type Validator = (value: string, errorMessage?: string) => string | null;
+export type Validator = (value: string) => string | null;
 
 export type CustomMessageValidator = {
 	validator: Validator;
 	errorMessage?: string;
 };
+
+export function withMessage(
+	validator: Validator,
+	errorMessage: string,
+): CustomMessageValidator {
+	return { validator, errorMessage };
+}
 
 export function allValid(...erroreds: Boolean[]) {
 	return erroreds.every((b) => !b);

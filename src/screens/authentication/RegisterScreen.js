@@ -5,8 +5,14 @@ import { Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { ThemedValidTextInput } from "@/components/themed";
-import { isRequired, useValidation } from "@/hooks/validation";
-import { validateAll } from "@/hooks/validation/useValidation";
+import {
+	MatchValue,
+	MinLength,
+	Required,
+	useValidation,
+} from "@/hooks/validation";
+import { validateAll, withMessage } from "@/hooks/validation/useValidation";
+import { Password } from "@/utils/validation";
 
 function RegisterScreen() {
 	const navigation = useNavigation();
@@ -16,14 +22,14 @@ function RegisterScreen() {
 		errored: nameErrored,
 		errorMessage: nameErrorMessage,
 		validate: validateName,
-	} = useValidation("", [isRequired]);
+	} = useValidation("", [Required, MinLength(2)]);
 	const {
 		value: username,
 		onChangeText: onUsernameChange,
 		errored: usernameErrored,
 		errorMessage: usernameErrorMessage,
 		validate: validateUsername,
-	} = useValidation("", [isRequired]);
+	} = useValidation("", [Required, MinLength(2)]);
 
 	const {
 		value: password,
@@ -31,14 +37,17 @@ function RegisterScreen() {
 		errored: passwordErrored,
 		errorMessage: passwordErrorMessage,
 		validate: validatePassword,
-	} = useValidation("", [isRequired]);
+	} = useValidation("", [Required, Password]);
 	const {
 		value: passwordConfirm,
 		onChangeText: onpasswordConfirmChange,
 		errored: passwordConfirmErrored,
 		errorMessage: passwordConfirmErrorMessage,
 		validate: validatePasswordConfirm,
-	} = useValidation("", [isRequired]);
+	} = useValidation("", [
+		Required,
+		withMessage(MatchValue(password), "Passwords do not match"),
+	]);
 
 	const handleRegister = () => {
 		if (
@@ -49,7 +58,7 @@ function RegisterScreen() {
 				validatePasswordConfirm,
 			)
 		) {
-			navigation.navigate("HomeTab"); // Navigate to the Home screen after registration
+			navigation.navigate("LoginScreen");
 		}
 	};
 
