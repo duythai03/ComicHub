@@ -2,7 +2,7 @@ import { Image, TouchableWithoutFeedback } from "react-native";
 
 import day from "R/image/day.png";
 import night from "R/image/night.png";
-import { useTheme } from "@/hooks/theme/useTheme";
+import { useTheme } from "@/theme/useTheme";
 
 export default function ThemeButton() {
 	const { isDarkMode, toggleDarkTheme } = useTheme();

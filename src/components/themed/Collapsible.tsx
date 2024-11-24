@@ -3,7 +3,7 @@ import { PropsWithChildren, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { useThemeColor } from "@/hooks/theme/useThemeColor";
+import { useThemeColor } from "@/theme/useThemeColor";
 
 export function Collapsible({
 	children,

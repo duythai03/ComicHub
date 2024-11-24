@@ -31,7 +31,7 @@
  * - If `useColorScheme()` returns `null`, the default scheme is considered `light`.
  *
  */
-import { ThemeKey, ThemeName, ThemeType } from "@/constants/Colors";
+import { ThemeKey, ThemeName, ThemeType } from "./Colors";
 import { useThemeContext } from "./ThemeContext";
 
 export function useThemeColor<

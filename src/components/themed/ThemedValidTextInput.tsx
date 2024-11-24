@@ -1,8 +1,8 @@
-import { useThemeColor } from "@/hooks/theme/useThemeColor";
 import ThemedTextInput, { ThemedTextInputProps } from "./ThemedTextInput";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { Style } from "nativewind/dist/style-sheet/runtime";
+import { useThemeColor } from "@/theme/useThemeColor";
 
 export type ThemedValidTextInputProps = ThemedTextInputProps & {
 	errored?: boolean;
