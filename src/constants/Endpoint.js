@@ -8,4 +8,8 @@ export const ENDPOINT = {
 	LOGIN_V1: "/v1/auth/login",
 	REGISTER_V1: "/v1/auth/register",
 	LOGOUT_V1: "/v1/auth/logout",
+
+	// USER
+	GET_USER_PROFILE_V1: "/v1/users/profile",
+	UPDATE_USER_PROFILE_V1: "/v1/users/profile",
 };

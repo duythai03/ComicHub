@@ -3,6 +3,12 @@ import publicRequest from "@/utils/request/publicRequest";
 import { saveToken } from "@/utils/request/utils";
 import { AxiosResponse, HttpStatusCode } from "axios";
 import { ErrorHandler, SuccessHandler } from "./types";
+import AppAsyncStorage from "@/utils/AppAsyncStorage";
+import { StorageKey } from "@/constants/AppProperties";
+
+export async function userAlreadyLoggedIn() {
+	return (await AppAsyncStorage.getItem(StorageKey.REFRESH_TOKEN)) !== null;
+}
 
 export async function login(
 	requestBody: {

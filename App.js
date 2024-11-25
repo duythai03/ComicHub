@@ -34,15 +34,15 @@ function SafeApp() {
 
 export default function App() {
 	return (
-		<QueryClientProvider client={queryClient}>
-			<ThemeProviderV2>
-				<ThemeProviderV1>
-					<UserProvider>
+		<UserProvider>
+			<QueryClientProvider client={queryClient}>
+				<ThemeProviderV2>
+					<ThemeProviderV1>
 						<SafeApp />
 						<Toast />
-					</UserProvider>
-				</ThemeProviderV1>
-			</ThemeProviderV2>
-		</QueryClientProvider>
+					</ThemeProviderV1>
+				</ThemeProviderV2>
+			</QueryClientProvider>
+		</UserProvider>
 	);
 }

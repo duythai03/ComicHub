@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import AppAsyncStorage from "../AppAsyncStorage";
 import { ENDPOINT } from "@/constants/Endpoint";
 import { StorageKey } from "@/constants/AppProperties";
@@ -35,8 +35,12 @@ privateRequest.interceptors.response.use(
 	async (error) => {
 		const config = error?.config;
 
-		if (error?.response?.status === HTTPStatus.UNAUTHORIZED && !config?.sent) {
+		if (
+			error?.response?.status === HttpStatusCode.Unauthorized &&
+			!config?.sent
+		) {
 			config.sent = true;
+
 			const newAccessToken = await refreshToken();
 
 			if (newAccessToken) {
