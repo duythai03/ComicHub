@@ -13,9 +13,17 @@ import {
 } from "@/hooks/validation";
 import { validateAll, withMessage } from "@/hooks/validation/useValidation";
 import { Password } from "@/utils/validation";
+import { register } from "@/apiServices/authService";
+import { HttpStatusCode } from "axios";
+import Toast from "react-native-toast-message";
+import { useCallback, useRef, useState } from "react";
+import { ScreenName } from "@/constants/ScreenName";
+import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
 
 function RegisterScreen() {
 	const navigation = useNavigation();
+	const passwordRef = useRef("");
+	const [loading, setLoading] = useState(false);
 	const {
 		value: name,
 		onChangeText: onNameChange,
@@ -26,6 +34,7 @@ function RegisterScreen() {
 		value: username,
 		onChangeText: onUsernameChange,
 		errorMessage: usernameErrorMessage,
+		setErrorMessage: setUsernameErrorMessage,
 		validate: validateUsername,
 	} = useValidation("", [Required, MinLength(2)]);
 
@@ -42,10 +51,13 @@ function RegisterScreen() {
 		validate: validatePasswordConfirm,
 	} = useValidation("", [
 		Required,
-		withMessage(MatchValue(password), "Passwords do not match"),
+		withMessage(
+			MatchValue(() => passwordRef),
+			"Passwords do not match",
+		),
 	]);
 
-	const handleRegister = () => {
+	const handleRegister = async () => {
 		if (
 			validateAll(
 				validateUsername,
@@ -54,7 +66,41 @@ function RegisterScreen() {
 				validatePasswordConfirm,
 			)
 		) {
-			navigation.navigate("LoginScreen");
+			setLoading(true);
+			await register(
+				{
+					username,
+					password,
+					name,
+				},
+				(code) => {
+					switch (code) {
+						case HttpStatusCode.Conflict:
+							setUsernameErrorMessage("The username is already taken");
+							break;
+						default:
+							Toast.show({
+								type: "error",
+								text1: "Đã có lỗi xảy ra",
+								text2: "Vui lòng thử lại sau",
+							});
+							break;
+					}
+				},
+				() => {
+					setLoading(false);
+					navigation.navigate(ScreenName.LOGIN, {
+						from: ScreenName.REGISTER,
+						username,
+					});
+					Toast.show({
+						type: "success",
+						text1: "Đăng ký thành công",
+						text2: "Vui lòng đăng nhập để tiếp tục",
+					});
+				},
+			);
+			setLoading(false);
 		}
 	};
 
@@ -89,7 +135,7 @@ function RegisterScreen() {
 				value={username}
 				onChangeText={onUsernameChange}
 				errorMessage={usernameErrorMessage}
-				placeholder="UserName"
+				placeholder="Tên đăng nhập"
 				keyboardType="email-address"
 				className="w-full p-4 rounded-xl mb-4"
 				style={{ elevation: 5 }}
@@ -98,7 +144,11 @@ function RegisterScreen() {
 
 			<ThemedValidTextInput
 				value={password}
-				onChangeText={onPasswordChange}
+				onChangeText={(text) => {
+					passwordRef.current = text;
+					onPasswordChange(text);
+					validatePasswordConfirm(passwordConfirm);
+				}}
 				errorMessage={passwordErrorMessage}
 				placeholder="Mật khẩu"
 				secureTextEntry
@@ -120,7 +170,10 @@ function RegisterScreen() {
 				onPress={handleRegister}
 				className="w-full p-4 rounded-xl items-center mb-6"
 			>
-				<ThemedText className="text-lg font-semibold">Đăng ký</ThemedText>
+				<ThemedLoadingCircle loading={loading} />
+				{!loading && (
+					<ThemedText className="text-lg font-semibold">Đăng ký</ThemedText>
+				)}
 			</TouchableOpacity>
 
 			<ThemedView className="flex-row items-center justify-center">

@@ -13,8 +13,12 @@ import { useState } from "react";
 import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
 import { HttpStatusCode } from "axios";
 import Toast from "react-native-toast-message";
+import { ScreenName } from "@/constants/ScreenName";
 
-function LoginScreen() {
+function LoginScreen({ route }) {
+	console.log(route);
+	const { params } = route;
+
 	const navigation = useNavigation();
 	const [loading, setLoading] = useState(false);
 	const { user, setUser } = useUserContext();
@@ -23,7 +27,10 @@ function LoginScreen() {
 		onChangeText: onUsernameChange,
 		errorMessage: usernameErrorMessage,
 		validate: validateUsername,
-	} = useValidation("", [Required, MinLength(2)]);
+	} = useValidation(
+		(params?.from === ScreenName.REGISTER && params?.username) || "",
+		[Required, MinLength(2)],
+	);
 
 	const {
 		value: password,
@@ -36,7 +43,8 @@ function LoginScreen() {
 		// validate as least as one
 		if (validateAll(validatePassword, validateUsername)) {
 			setLoading(true);
-			const response = await login(
+
+			const dataResponse = await login(
 				{
 					username,
 					password,
@@ -59,8 +67,8 @@ function LoginScreen() {
 				},
 			);
 			setLoading(false);
-			if (response) {
-				const { name } = response;
+			if (dataResponse) {
+				const { name } = dataResponse;
 				setUser({ name });
 				navigation.navigate("HomeTab");
 			}
