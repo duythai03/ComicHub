@@ -16,7 +16,7 @@ import { Password } from "@/utils/validation";
 import { register } from "@/apiServices/authService";
 import { HttpStatusCode } from "axios";
 import Toast from "react-native-toast-message";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ScreenName } from "@/constants/ScreenName";
 import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
 

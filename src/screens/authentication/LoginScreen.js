@@ -16,12 +16,10 @@ import Toast from "react-native-toast-message";
 import { ScreenName } from "@/constants/ScreenName";
 
 function LoginScreen({ route }) {
-	console.log(route);
 	const { params } = route;
-
 	const navigation = useNavigation();
 	const [loading, setLoading] = useState(false);
-	const { user, setUser } = useUserContext();
+	const { setUser } = useUserContext();
 	const {
 		value: username,
 		onChangeText: onUsernameChange,
