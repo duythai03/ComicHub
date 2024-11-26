@@ -26,15 +26,15 @@ export default function Slider({ data }) {
     if (!item) return null;
     const actualIndex = index % data.length;
 
-    const thumbnail = item.thumb_url
-      ? `https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`
+    const thumbnail = item.thumbnailUrl
+      ? item.thumbnailUrl
       : "https://placeholder.com/placeholder.png";
 
     const name = item.name || "Unknown Title";
     const chapter =
-      item.chaptersLatest && item.chaptersLatest[0]
-        ? item.chaptersLatest[0].chapter_name
-        : "N/A";
+      item.newChapters && item.newChapters[0]
+        ? item.newChapters[2].chapter
+        : "Chapter: N/A";
 
     return (
       <TouchableWithoutFeedback
@@ -62,9 +62,7 @@ export default function Slider({ data }) {
                 {name.length > 24 ? name.slice(0, 24) + "..." : name}
               </Text>
               <View className="px-4 flex-row justify-between items-center">
-                <Text className="text-sm text-white font-bold">
-                  Chapter: {chapter}
-                </Text>
+                <Text className="text-sm text-white font-bold">{chapter}</Text>
                 <View className="flex-row items-center">
                   <AntDesign name="star" size={16} color="#f1b207" />
                   <Text className="text-sm text-white ml-1">4.5</Text>
