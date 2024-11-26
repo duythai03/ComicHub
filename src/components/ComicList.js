@@ -26,7 +26,7 @@ export default function ComicList({ title, data }) {
         >
           <Image
             source={{
-              uri: `https://img.otruyenapi.com/uploads/comics/${item.thumb_url}`,
+              uri: item.thumbnailUrl,
             }}
             className="w-full h-full rounded-2xl"
             resizeMode="cover"
@@ -54,7 +54,7 @@ export default function ComicList({ title, data }) {
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={renderItem}
-        keyExtractor={(item) => item._id.toString()}
+        keyExtractor={(item) => item.id.toString()}
       />
     </View>
   );
