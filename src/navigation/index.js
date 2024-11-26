@@ -14,6 +14,7 @@ import { lightTheme, darkTheme } from "../utils/Theme";
 import LoginScreen from "@/screens/authentication/LoginScreen";
 import WelcomeScreen from "@/screens/WelcomeScreen";
 import { RegisterScreen } from "@/screens/authentication";
+import { navigationRef } from "./utils";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,7 +95,7 @@ export default function AppNavigation() {
 	}
 
 	return (
-		<NavigationContainer>
+		<NavigationContainer ref={navigationRef}>
 			<HomeStack />
 		</NavigationContainer>
 	);

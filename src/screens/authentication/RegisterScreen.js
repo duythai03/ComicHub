@@ -13,43 +13,51 @@ import {
 } from "@/hooks/validation";
 import { validateAll, withMessage } from "@/hooks/validation/useValidation";
 import { Password } from "@/utils/validation";
+import { register } from "@/apiServices/authService";
+import { HttpStatusCode } from "axios";
+import Toast from "react-native-toast-message";
+import { useRef, useState } from "react";
+import { ScreenName } from "@/constants/ScreenName";
+import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
 
 function RegisterScreen() {
 	const navigation = useNavigation();
+	const passwordRef = useRef("");
+	const [loading, setLoading] = useState(false);
 	const {
 		value: name,
 		onChangeText: onNameChange,
-		errored: nameErrored,
 		errorMessage: nameErrorMessage,
 		validate: validateName,
 	} = useValidation("", [Required, MinLength(2)]);
 	const {
 		value: username,
 		onChangeText: onUsernameChange,
-		errored: usernameErrored,
 		errorMessage: usernameErrorMessage,
+		setErrorMessage: setUsernameErrorMessage,
 		validate: validateUsername,
 	} = useValidation("", [Required, MinLength(2)]);
 
 	const {
 		value: password,
 		onChangeText: onPasswordChange,
-		errored: passwordErrored,
 		errorMessage: passwordErrorMessage,
 		validate: validatePassword,
 	} = useValidation("", [Required, Password]);
 	const {
 		value: passwordConfirm,
 		onChangeText: onpasswordConfirmChange,
-		errored: passwordConfirmErrored,
 		errorMessage: passwordConfirmErrorMessage,
 		validate: validatePasswordConfirm,
 	} = useValidation("", [
 		Required,
-		withMessage(MatchValue(password), "Passwords do not match"),
+		withMessage(
+			MatchValue(() => passwordRef),
+			"Passwords do not match",
+		),
 	]);
 
-	const handleRegister = () => {
+	const handleRegister = async () => {
 		if (
 			validateAll(
 				validateUsername,
@@ -58,7 +66,41 @@ function RegisterScreen() {
 				validatePasswordConfirm,
 			)
 		) {
-			navigation.navigate("LoginScreen");
+			setLoading(true);
+			await register(
+				{
+					username,
+					password,
+					name,
+				},
+				(code) => {
+					switch (code) {
+						case HttpStatusCode.Conflict:
+							setUsernameErrorMessage("The username is already taken");
+							break;
+						default:
+							Toast.show({
+								type: "error",
+								text1: "Đã có lỗi xảy ra",
+								text2: "Vui lòng thử lại sau",
+							});
+							break;
+					}
+				},
+				() => {
+					setLoading(false);
+					navigation.navigate(ScreenName.LOGIN, {
+						from: ScreenName.REGISTER,
+						username,
+					});
+					Toast.show({
+						type: "success",
+						text1: "Đăng ký thành công",
+						text2: "Vui lòng đăng nhập để tiếp tục",
+					});
+				},
+			);
+			setLoading(false);
 		}
 	};
 
@@ -83,7 +125,6 @@ function RegisterScreen() {
 			<ThemedValidTextInput
 				value={name}
 				onChangeText={onNameChange}
-				errored={nameErrored}
 				errorMessage={nameErrorMessage}
 				placeholder="Họ và Tên"
 				className="w-full p-4 rounded-xl mb-4"
@@ -93,9 +134,8 @@ function RegisterScreen() {
 			<ThemedValidTextInput
 				value={username}
 				onChangeText={onUsernameChange}
-				errored={usernameErrored}
 				errorMessage={usernameErrorMessage}
-				placeholder="UserName"
+				placeholder="Tên đăng nhập"
 				keyboardType="email-address"
 				className="w-full p-4 rounded-xl mb-4"
 				style={{ elevation: 5 }}
@@ -104,8 +144,11 @@ function RegisterScreen() {
 
 			<ThemedValidTextInput
 				value={password}
-				onChangeText={onPasswordChange}
-				errored={passwordErrored}
+				onChangeText={(text) => {
+					passwordRef.current = text;
+					onPasswordChange(text);
+					validatePasswordConfirm(passwordConfirm);
+				}}
 				errorMessage={passwordErrorMessage}
 				placeholder="Mật khẩu"
 				secureTextEntry
@@ -116,7 +159,6 @@ function RegisterScreen() {
 			<ThemedValidTextInput
 				value={passwordConfirm}
 				onChangeText={onpasswordConfirmChange}
-				errored={passwordConfirmErrored}
 				errorMessage={passwordConfirmErrorMessage}
 				placeholder="Xác nhận mật khẩu"
 				secureTextEntry
@@ -128,7 +170,10 @@ function RegisterScreen() {
 				onPress={handleRegister}
 				className="w-full p-4 rounded-xl items-center mb-6"
 			>
-				<ThemedText className="text-lg font-semibold">Đăng ký</ThemedText>
+				<ThemedLoadingCircle loading={loading} />
+				{!loading && (
+					<ThemedText className="text-lg font-semibold">Đăng ký</ThemedText>
+				)}
 			</TouchableOpacity>
 
 			<ThemedView className="flex-row items-center justify-center">

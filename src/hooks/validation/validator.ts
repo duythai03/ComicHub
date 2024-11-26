@@ -1,3 +1,5 @@
+import { MutableRefObject } from "react";
+
 export const Required = (value: string) => {
 	return value.trim() ? null : "This field is required.";
 };
@@ -10,5 +12,7 @@ export const Email = (value: string) => {
 export const MinLength = (length: number) => (value: string) =>
 	value.length >= length ? null : `Must be at least ${length} characters.`;
 
-export const MatchValue = (matchValue: string) => (value: string) =>
-	value === matchValue ? null : "Values do not match.";
+export const MatchValue =
+	(getMatchValue: () => MutableRefObject<string>) => (value: string) => {
+		return value === getMatchValue().current ? null : "Values do not match.";
+	};
