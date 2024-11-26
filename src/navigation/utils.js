@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 
 // export const navigationRef = createNavigationContainerRef();
-
 const history = {
 	navigation: null,
 };

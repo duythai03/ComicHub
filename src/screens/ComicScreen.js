@@ -54,7 +54,7 @@ export default function ComicScreen() {
         >
           <Image
             source={{
-              uri: `https://img.otruyenapi.com/uploads/comics/${comic.thumb_url}`,
+              uri: comic.thumbnailUrl,
             }}
             className="w-full h-full"
           />
@@ -62,12 +62,12 @@ export default function ComicScreen() {
             <Text className="text-white text-lg font-bold">{comic.name}</Text>
             <Text className="text-gray-200 text-sm">
               Tác giả:{" "}
-              {comic.author && comic.author[0]
-                ? comic.author[0]
+              {comic.authors && comic.authors[0]
+                ? comic.authors[0]
                 : "Đang cập nhập"}
             </Text>
             <View className="flex flex-row space-x-3">
-              {comic.category.slice(0, 4).map((genre, index) => (
+              {comic.categories.slice(0, 4).map((genre, index) => (
                 <View key={index} className="my-2">
                   <Text className="text-gray-200 text-sm p-1 border-[1px] border-white rounded-sm text-center">
                     {genre.name}

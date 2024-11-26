@@ -11,7 +11,7 @@ import { UserProvider } from "@/contexts/UserContext";
 import { Suspense } from "react";
 import LoadingCircle from "@/components/LoadingCircle";
 import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
-import { GlobalNavigation } from "@/navigation/utils";
+// import { GlobalNavigation } from "@/navigation/utils";
 
 const queryClient = new QueryClient();
 
