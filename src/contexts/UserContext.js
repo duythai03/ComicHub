@@ -1,6 +1,5 @@
 import { userAlreadyLoggedIn } from "@/apiServices/authService";
 import { getUserProfile } from "@/apiServices/userService";
-import { navigate } from "@/navigation/utils";
 import { HttpStatusCode } from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -19,7 +18,6 @@ export function UserProvider({ children }) {
 		async function getUserInfo() {
 			const loggedIn = await userAlreadyLoggedIn();
 			if (!loggedIn) return;
-			navigate("HomeTab");
 
 			const user = await getUserProfile((code) => {
 				switch (code) {

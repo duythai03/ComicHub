@@ -18,6 +18,7 @@ export const Colors = {
 
 		// Text
 		text: "#11181C", // Primary text color
+		subtitle: "#687076",
 		onPrimary: "#FFFFFF", // Text color on primary color elements
 		onSecondary: "#000000", // Text color on secondary color elements
 		onBackground: "#000000", // Text color on background color elements
@@ -62,6 +63,7 @@ export const Colors = {
 
 		// Text
 		text: "#ECEDEE", // Primary text color
+		subtitle: "#9BA1A6",
 		onPrimary: "#000000", // Text color on primary color elements
 		onSecondary: "#000000", // Text color on secondary color elements
 		onBackground: "#ECEDEE", // Text color on background color elements

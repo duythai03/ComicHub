@@ -10,6 +10,8 @@ import Toast from "react-native-toast-message";
 import { UserProvider } from "@/contexts/UserContext";
 import { Suspense } from "react";
 import LoadingCircle from "@/components/LoadingCircle";
+import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
+import { GlobalNavigation } from "@/navigation/utils";
 
 const queryClient = new QueryClient();
 
@@ -34,15 +36,15 @@ function SafeApp() {
 
 export default function App() {
 	return (
-		<UserProvider>
-			<QueryClientProvider client={queryClient}>
-				<ThemeProviderV2>
-					<ThemeProviderV1>
+		<QueryClientProvider client={queryClient}>
+			<ThemeProviderV2>
+				<ThemeProviderV1>
+					<UserProvider>
 						<SafeApp />
 						<Toast />
-					</ThemeProviderV1>
-				</ThemeProviderV2>
-			</QueryClientProvider>
-		</UserProvider>
+					</UserProvider>
+				</ThemeProviderV1>
+			</ThemeProviderV2>
+		</QueryClientProvider>
 	);
 }

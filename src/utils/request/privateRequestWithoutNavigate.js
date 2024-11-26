@@ -2,8 +2,11 @@ import axios, { HttpStatusCode } from "axios";
 import AppAsyncStorage from "../AppAsyncStorage";
 import { ENDPOINT } from "@/constants/Endpoint";
 import { StorageKey } from "@/constants/AppProperties";
-import { navigateToLogin, refreshToken } from "./utils";
+import { refreshToken } from "./utils";
 import publicRequest from "./publicRequest";
+import Toast from "react-native-toast-message";
+import { navigate } from "@/navigation/utils";
+import { ScreenName } from "@/constants/ScreenName";
 
 const privateRequest = axios.create({
 	baseURL: ENDPOINT.BASE_URL_V1,
@@ -20,10 +23,8 @@ privateRequest.interceptors.request.use(
 				...config.headers,
 				Authorization: `Bearer ${accessToken}`,
 			};
-			return config;
 		}
-		console.log("You are not logged in");
-		return Promise.reject("You are not logged in");
+		return config;
 	},
 	(error) => Promise.reject(error),
 );
@@ -41,25 +42,21 @@ privateRequest.interceptors.response.use(
 		) {
 			config.sent = true;
 
-			try {
-				const newAccessToken = await refreshToken();
-				if (newAccessToken) {
-					config.headers = {
-						...config.headers,
-						Authorization: `Bearer ${newAccessToken}`,
-					};
-					return publicRequest(config);
-				}
-				navigateToLogin();
-			} catch (error) {
-				const statusCode = error?.status;
-				switch (statusCode) {
-					case HttpStatusCode.Unauthorized:
-						navigateToLogin();
-						break;
-					default:
-				}
+			const newAccessToken = await refreshToken();
+			if (newAccessToken) {
+				config.headers = {
+					...config.headers,
+					Authorization: `Bearer ${newAccessToken}`,
+				};
+				return publicRequest(config);
 			}
+
+			Toast.show({
+				type: "error",
+				text1: "Session expired",
+				text2: "Please login again",
+			});
+
 			return Promise.reject(error);
 		}
 		return Promise.reject(error);
