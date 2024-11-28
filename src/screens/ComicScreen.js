@@ -1,32 +1,47 @@
 import { View, Text, Dimensions, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
-import { useTheme } from "../utils/Context";
-import { lightTheme, darkTheme } from "../utils/Theme";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import GradientOverlay from "../components/GradientOverlay";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useQuery } from "@tanstack/react-query";
+import { fetchComicDetail } from "@/utils/ComicApi";
+import { ThemedView } from "@/components/themed/ThemedView";
+import { ThemedText } from "@/components/themed/ThemedText";
 
 export default function ComicScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const comic = route?.params?.comic;
-  const { isDarkMode } = useTheme();
-  const theme = isDarkMode ? darkTheme : lightTheme;
   const { width, height } = Dimensions.get("window");
   const widthImg = width;
   const heightImg = height * 0.35;
+  const [comicDetail, setComicDetail] = useState(null);
 
-  if (!comic) {
-    return (
-      <View>
-        <Text>Comic data is missing!</Text>
-      </View>
-    );
-  }
+  useQuery({
+    queryKey: ["comicDetail"],
+    queryFn: () => fetchComicDetail(comic.id),
+    onSuccess: (data) => {
+      setComicDetail(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const [showFullSummary, setShowFullSummary] = useState(false);
+
+  const handleSummaryToggle = () => {
+    setShowFullSummary(!showFullSummary);
+  };
+
+  const cleanedSummary = comicDetail?.summary
+    ? comicDetail.summary.replace(/<p>|<\/p>|&nbsp;/g, "")
+    : "Đang cập nhập";
 
   return (
-    <View className="flex-1" style={theme.container}>
+    <ThemedView className="flex-1">
       <View className="relative">
         {/* Back Button */}
         <TouchableOpacity
@@ -78,12 +93,42 @@ export default function ComicScreen() {
           </GradientOverlay>
         </View>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Reading", { comic })}
-        >
-          <Text>{comic.name}</Text>
-        </TouchableOpacity>
+        <View className="flex flex-row justify-between items-center p-3">
+          <ThemedText className="text-base font-bold">Đánh giá</ThemedText>
+          <View className="flex flex-row items-center">
+            <FontAwesome name="star" size={21} color="#f1b207" />
+            <FontAwesome name="star" size={21} color="#f1b207" />
+            <FontAwesome name="star" size={21} color="#f1b207" />
+            <FontAwesome name="star" size={21} color="#f1b207" />
+            <FontAwesome name="star" size={21} color="#f1b207" />
+            <ThemedText className="ml-2">4.9/5</ThemedText>
+          </View>
+        </View>
+        <View className="px-3">
+          <ThemedText className="text-base font-bold">Mô tả</ThemedText>
+          <ThemedText className="ThemedText-sm">
+            {cleanedSummary.length > 200 && !showFullSummary
+              ? `${cleanedSummary.substring(0, 200)}...`
+              : cleanedSummary}
+            {cleanedSummary.length > 200 && (
+              <TouchableOpacity
+                className="translate-y-1"
+                onPress={handleSummaryToggle}
+              >
+                <Text className="text-[#c226f1]">
+                  {showFullSummary ? "Thu gọn" : "Xem thêm"}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </ThemedText>
+        </View>
       </View>
-    </View>
+
+      {/* <TouchableOpacity
+        onPress={() => navigation.navigate("Reading", { comic })}
+      >
+        <ThemedText>{comic.name}</ThemedText>
+      </TouchableOpacity> */}
+    </ThemedView>
   );
 }
