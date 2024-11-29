@@ -5,15 +5,12 @@ import {
 } from "@/apiServices/favoriteService";
 import { addEventListener } from "@/components/event";
 import { EventName } from "@/constants/EventName";
-import useDebounce from "@/hooks/useDebounce";
-import { sleep } from "@/utils/suspend";
 import { HttpStatusCode } from "axios";
 import {
 	createContext,
 	useCallback,
 	useContext,
 	useEffect,
-	useRef,
 	useState,
 } from "react";
 import Toast from "react-native-toast-message";
@@ -202,6 +199,7 @@ export function FavoriteProvider({ children }) {
 				favoriteComics,
 				totalComics,
 
+				initialFetching,
 				nextPageFetching,
 
 				fetchComics,
