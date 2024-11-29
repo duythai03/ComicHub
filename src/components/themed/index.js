@@ -6,3 +6,4 @@ export { default as ThemedSwitch } from "./ThemedSwitch";
 export { default as Collapsible } from "./Collapsible";
 export { default as ParallaxScrollView } from "./ParallaxScrollView";
 export { default as ThemedSaveAreaView } from "./ThemedSaveAreaView";
+export { default as ThemedLoadingCircle } from "./ThemedLoadingCircle";

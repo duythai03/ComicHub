@@ -1,7 +1,7 @@
 import { ENDPOINT } from "@/constants/Endpoint";
 import privateRequest from "@/utils/request/privateRequest";
 import { ErrorHandler, SuccessHandler } from "./types";
-import { userAlreadyLoggedIn } from "./authService";
+import { AxiosRequestConfig } from "axios";
 
 export const getUserProfile = async (
 	/**
@@ -24,9 +24,13 @@ export const getUserProfile = async (
 	 * get the response
 	 */
 	onSuccess?: SuccessHandler,
+	config?: AxiosRequestConfig<any>,
 ) => {
 	try {
-		const response = await privateRequest.get(ENDPOINT.GET_USER_PROFILE_V1);
+		const response = await privateRequest.get(
+			ENDPOINT.GET_USER_PROFILE_V1,
+			config,
+		);
 
 		const { data, status } = response;
 		if (onSuccess && !onSuccess(status, response)) {
@@ -34,7 +38,6 @@ export const getUserProfile = async (
 		}
 		return data;
 	} catch (error: any) {
-		console.log(error);
 		console.log("Error in getUserProfile with status code: ", error.status);
 		onError(error.status, error);
 	}

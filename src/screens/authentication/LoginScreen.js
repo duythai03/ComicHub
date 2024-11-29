@@ -1,7 +1,5 @@
 import { ThemedText } from "@/components/themed/ThemedText";
 import { ThemedView } from "@/components/themed/ThemedView";
-import logo from "R/logo.jpg";
-import { Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { ThemedValidTextInput } from "@/components/themed";
@@ -14,6 +12,9 @@ import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
 import { HttpStatusCode } from "axios";
 import Toast from "react-native-toast-message";
 import { ScreenName } from "@/constants/ScreenName";
+import BackHomeLogo from "@/components/BackHomeLogo";
+import { emitEvent, eventEmitter } from "@/components/event";
+import { EventName } from "@/constants/EventName";
 
 function LoginScreen({ route }) {
 	const { params } = route;
@@ -66,8 +67,7 @@ function LoginScreen({ route }) {
 			);
 			setLoading(false);
 			if (dataResponse) {
-				const { name } = dataResponse;
-				setUser({ name });
+				emitEvent(EventName.LOGIN, dataResponse);
 				navigation.navigate("HomeTab");
 			}
 		}
@@ -88,15 +88,9 @@ function LoginScreen({ route }) {
 				backgroundColor: "transparent",
 			}}
 		>
-			<Image
-				source={logo}
-				style={{
-					width: 160,
-					height: 160,
-					borderRadius: 80,
-					marginBottom: 30,
-					borderWidth: 4,
-				}}
+			<BackHomeLogo
+				style={{ borderWidth: 4, borderColor: "white" }}
+				className="rounded-full mb-12 w-40 h-40 shadow-lg"
 			/>
 			<ThemedValidTextInput
 				value={username}

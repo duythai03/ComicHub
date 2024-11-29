@@ -16,8 +16,15 @@ export const Colors = {
 		surface: "#F4F4F4", // Background color for surfaces like cards, tables
 		elevatedSurface: "#FFFFFF", // Surface color for elevated components (e.g., dialogs)
 
+		modalBackground: "#F4F4F4",
+		cancelText: "#555555",
+		confirmText: "#ffffff",
+		cancelButton: "#e0e0e0",
+		confirmButton: "#5c9dff",
+
 		// Text
 		text: "#11181C", // Primary text color
+		subtitle: "#687076",
 		onPrimary: "#FFFFFF", // Text color on primary color elements
 		onSecondary: "#000000", // Text color on secondary color elements
 		onBackground: "#000000", // Text color on background color elements
@@ -60,8 +67,15 @@ export const Colors = {
 		surface: "#2A2D30", // Background color for surfaces like cards, tables
 		elevatedSurface: "#121212", // Surface color for elevated components (e.g., dialogs)
 
+		modalBackground: "#2A2D30",
+		cancelButton: "#4a4a4f",
+		confirmButton: "#4587e0",
+		cancelText: "#bbbbbb",
+		confirmText: "#ffffff",
+
 		// Text
 		text: "#ECEDEE", // Primary text color
+		subtitle: "#9BA1A6",
 		onPrimary: "#000000", // Text color on primary color elements
 		onSecondary: "#000000", // Text color on secondary color elements
 		onBackground: "#ECEDEE", // Text color on background color elements
