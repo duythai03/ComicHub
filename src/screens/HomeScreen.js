@@ -17,7 +17,6 @@ import { useTheme } from "../utils/Context";
 import LoadingCircle from "../components/LoadingCircle";
 import { useNavigation } from "@react-navigation/native";
 import ComicList from "@/components/ComicList";
-import ComicList from "@/components/ComicList";
 
 export default function HomeScreen() {
   const [truyenMoi, setTruyenMoi] = useState([]);

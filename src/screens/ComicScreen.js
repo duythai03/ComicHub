@@ -12,6 +12,7 @@ import { ThemedText } from "@/components/themed/ThemedText";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LoadingCircle from "@/components/LoadingCircle";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFavorite } from "@/contexts/FavoriteContext";
 
 export default function ComicScreen() {
   const navigation = useNavigation();
