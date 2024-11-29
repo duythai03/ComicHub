@@ -10,7 +10,7 @@ import { useState } from "react";
 type FavoriteComicProps = SimpleComicProps & {
 	width?: DimensionValue;
 	isRemoving: boolean;
-	onUnFavorite: (setModalVisible: (visible: boolean) => void) => void;
+	onUnFavorite: (closeModal: () => void) => Promise<void>;
 	onCardPress: () => void;
 	modalProps: ConfirmModalProps;
 };
@@ -25,6 +25,11 @@ export default function FavoriteComic({
 	onUnFavorite,
 }: FavoriteComicProps) {
 	const [modalVisible, setModalVisible] = useState(false);
+
+	async function handleUnFavorite() {
+		await onUnFavorite(() => setModalVisible(false));
+		setModalVisible(false);
+	}
 
 	return (
 		<ThemedView
@@ -53,7 +58,12 @@ export default function FavoriteComic({
 				</ThemedText>
 				<ThemedView className="flex-row items-center">
 					<ThemedMaterialsIcon name="date-range" size={16} className="mr-2" />
-					<ThemedText subtitle className="text-sm">
+					<ThemedText
+						numberOfLines={1}
+						ellipsizeMode="tail"
+						subtitle
+						className="text-sm"
+					>
 						{updatedAt}
 					</ThemedText>
 				</ThemedView>
@@ -65,9 +75,7 @@ export default function FavoriteComic({
 					"Are you sure you want to remove this comic from your favorites?"
 				}
 				onClose={() => setModalVisible(false)}
-				onConfirm={async () => {
-					onUnFavorite(setModalVisible);
-				}}
+				onConfirm={handleUnFavorite}
 			/>
 		</ThemedView>
 	);

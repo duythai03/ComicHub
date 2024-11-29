@@ -10,6 +10,8 @@ import { AxiosRequestConfig, AxiosResponse, HttpStatusCode } from "axios";
 import { ErrorHandler, SuccessHandler } from "./types";
 import AppAsyncStorage from "@/utils/AppAsyncStorage";
 import { StorageKey } from "@/constants/AppProperties";
+import { emitEvent, eventEmitter } from "@/components/event";
+import { EventName } from "@/constants/EventName";
 
 export async function userAlreadyLoggedIn() {
 	const [accessToken, refreshToken] = await Promise.all([
@@ -155,6 +157,7 @@ export async function logout(
 			getBearerTokenConfig(refreshToken, config),
 		);
 		const { status } = response;
+		emitEvent(EventName.LOGOUT);
 		if (onSuccess && onSuccess(status, response) === false) {
 			return;
 		}

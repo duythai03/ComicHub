@@ -12,6 +12,8 @@ import {
 import publicRequest from "./publicRequest";
 import { checkLoginBeforeRequest } from "./methods";
 import Toast from "react-native-toast-message";
+import { emitEvent } from "@/components/event";
+import { EventName } from "@/constants/EventName";
 
 let isRefreshing = false;
 let refreshSubscribers = [];
@@ -122,6 +124,7 @@ privateRequest.interceptors.response.use(
 					switch (error.status) {
 						case HttpStatusCode.Unauthorized:
 							clearToken();
+							emitEvent(EventName.LOGOUT);
 							if (config.navigateToLogin) {
 								navigateToLogin();
 							}

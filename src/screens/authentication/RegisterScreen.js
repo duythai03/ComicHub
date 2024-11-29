@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/themed/ThemedText";
 import { ThemedView } from "@/components/themed/ThemedView";
 import logo from "R/logo.jpg";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { ThemedValidTextInput } from "@/components/themed";
@@ -20,8 +20,10 @@ import { useRef, useState } from "react";
 import { ScreenName } from "@/constants/ScreenName";
 import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
 import BackHomeLogo from "@/components/BackHomeLogo";
+import ThemedMaterialsIcon from "@/components/themed/ThemedMaterialsIcon";
 
-function RegisterScreen() {
+function RegisterScreen({ route }) {
+	const { params } = route;
 	const navigation = useNavigation();
 	const passwordRef = useRef("");
 	const [loading, setLoading] = useState(false);
@@ -110,7 +112,7 @@ function RegisterScreen() {
 	};
 
 	return (
-		<ThemedView className="flex-1 justify-center items-center px-4">
+		<ThemedView className="flex-1 justify-center items-center px-4 relative">
 			<BackHomeLogo
 				style={{
 					borderWidth: 4,
@@ -118,6 +120,13 @@ function RegisterScreen() {
 				}}
 				className="rounded-full mb-7 w-40 h-40 shadow-lg"
 			/>
+			{params?.from && (
+				<View className="absolute top-4 left-0 p-4 opacity-80">
+					<TouchableOpacity onPress={() => navigation.goBack()}>
+						<ThemedMaterialsIcon name="arrow-back" size={36} />
+					</TouchableOpacity>
+				</View>
+			)}
 			<ThemedValidTextInput
 				value={name}
 				onChangeText={onNameChange}

@@ -7,10 +7,10 @@ import { ThemedLoadingCircle } from "@/components/themed";
 import ErrorComponent from "./ErrorComponent";
 import { useNavigation } from "@react-navigation/native";
 import { useFavorite } from "@/contexts/FavoriteContext";
+import { formatTimeAgo } from "@/utils/dateago";
 
 function FavoriteScreen() {
 	const navigation = useNavigation();
-	const [isRemoving, setIsRemoving] = useState(false);
 	const {
 		error,
 		favoriteComics,
@@ -21,6 +21,7 @@ function FavoriteScreen() {
 		fetchNextPage,
 		atomicFetchNextPage,
 
+		addFavoriteComic,
 		removeFavoriteComic,
 	} = useFavorite();
 
@@ -58,16 +59,12 @@ function FavoriteScreen() {
 												comic: item,
 											});
 										}}
-										onUnFavorite={async (setModalVisible) => {
-											setIsRemoving(true);
+										onUnFavorite={async (closeModal) => {
 											await removeFavoriteComic(item.id);
-											setIsRemoving(false);
-											setModalVisible(false);
 										}}
-										modalProps={{ confirmLoading: isRemoving }}
 										name={item.name}
 										imageUri={item.thumbnailUrl}
-										updatedAt="2 days ago"
+										updatedAt={formatTimeAgo(item?.newChapterUpdatedAt)}
 									/>
 								);
 							}}
