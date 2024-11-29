@@ -18,6 +18,7 @@ import { EventName } from "@/constants/EventName";
 import ThemedMaterialsIcon from "@/components/themed/ThemedMaterialsIcon";
 import { Text, View } from "react-native";
 
+
 function LoginScreen({ route }) {
 	const { params } = route;
 	const navigation = useNavigation();

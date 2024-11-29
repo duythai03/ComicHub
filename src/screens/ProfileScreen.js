@@ -32,6 +32,7 @@ export default function ProfileScreen() {
 				</ThemedTouchableText>
 			</ThemedView>
 		);
+
 	}
 
 	return (
@@ -65,7 +66,6 @@ export default function ProfileScreen() {
 					</ThemedView>
 				</ThemedView>
 			</ThemedView>
-
 			<ThemeButton title="Edit Profile" />
 			<Button title="Logout" onPress={logout} />
 		</ThemedView>

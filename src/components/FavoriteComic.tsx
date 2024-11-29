@@ -31,6 +31,7 @@ export default function FavoriteComic({
 		setModalVisible(false);
 	}
 
+
 	return (
 		<ThemedView
 			style={{
@@ -64,6 +65,7 @@ export default function FavoriteComic({
 						subtitle
 						className="text-sm"
 					>
+
 						{updatedAt}
 					</ThemedText>
 				</ThemedView>
@@ -76,6 +78,7 @@ export default function FavoriteComic({
 				}
 				onClose={() => setModalVisible(false)}
 				onConfirm={handleUnFavorite}
+	
 			/>
 		</ThemedView>
 	);

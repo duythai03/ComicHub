@@ -3,4 +3,5 @@ export const ScreenName = {
 	REGISTER: "RegisterScreen",
 	FAVORITE: "FavoriteScreen",
 	PROFILE: "ProfileScreen",
+
 };

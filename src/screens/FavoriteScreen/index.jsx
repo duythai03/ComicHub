@@ -11,6 +11,7 @@ import { formatTimeAgo } from "@/utils/dateago";
 
 function FavoriteScreen() {
 	const navigation = useNavigation();
+
 	const {
 		error,
 		favoriteComics,
@@ -65,6 +66,7 @@ function FavoriteScreen() {
 										name={item.name}
 										imageUri={item.thumbnailUrl}
 										updatedAt={formatTimeAgo(item?.newChapterUpdatedAt)}
+
 									/>
 								);
 							}}

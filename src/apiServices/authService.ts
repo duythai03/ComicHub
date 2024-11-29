@@ -158,6 +158,7 @@ export async function logout(
 		);
 		const { status } = response;
 		emitEvent(EventName.LOGOUT);
+
 		if (onSuccess && onSuccess(status, response) === false) {
 			return;
 		}
