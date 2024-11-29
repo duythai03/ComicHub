@@ -44,6 +44,7 @@ export function ThemedText({
 				/>
 			)}
 			<Text
+				{...rest}
 				style={[
 					type === "default" ? styles.default : undefined,
 					type === "title" ? styles.title : undefined,
@@ -53,7 +54,6 @@ export function ThemedText({
 					{ color },
 					style,
 				]}
-				{...rest}
 			/>
 			{iconSuffixName && (
 				<MaterialIcons
@@ -66,6 +66,7 @@ export function ThemedText({
 		</ThemedView>
 	) : (
 		<Text
+			{...rest}
 			style={[
 				type === "default" ? styles.default : undefined,
 				type === "title" ? styles.title : undefined,
@@ -75,7 +76,6 @@ export function ThemedText({
 				{ color },
 				style,
 			]}
-			{...rest}
 		/>
 	);
 }

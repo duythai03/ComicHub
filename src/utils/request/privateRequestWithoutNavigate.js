@@ -5,11 +5,9 @@ import { StorageKey } from "@/constants/AppProperties";
 import { refreshToken } from "./utils";
 import publicRequest from "./publicRequest";
 import Toast from "react-native-toast-message";
-import { navigate } from "@/navigation/utils";
-import { ScreenName } from "@/constants/ScreenName";
 
 const privateRequest = axios.create({
-	baseURL: ENDPOINT.BASE_URL_V1,
+	baseURL: ENDPOINT.BASE_URL,
 	headers: {
 		"Content-Type": "application/json",
 	},

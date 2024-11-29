@@ -1,9 +1,20 @@
+import { userAlreadyLoggedIn } from "@/apiServices/authService";
+import { ThemedLoadingCircle } from "@/components/themed";
 import { ThemedText } from "@/components/themed/ThemedText";
 import { ThemedView } from "@/components/themed/ThemedView";
+import { useUserContext } from "@/contexts/UserContext";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Image } from "react-native";
 
 export default function ProfileScreen() {
+	const { user, isLoading, loggedIn } = useUserContext();
+
+	if (isLoading) {
+		console.log("Loading...");
+		return <ThemedLoadingCircle />;
+	}
+
 	return (
 		<ThemedView className="flex-1 px-4">
 			<ThemedView className="flex-row py-4 ml-2">

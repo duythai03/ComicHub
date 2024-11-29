@@ -1,25 +1,32 @@
 import { userAlreadyLoggedIn } from "@/apiServices/authService";
 import { getUserProfile } from "@/apiServices/userService";
-import { navigate } from "@/navigation/utils";
+import {
+	addEventListener,
+	addListener,
+	eventEmitter,
+} from "@/components/event";
+import { EventName } from "@/constants/EventName";
+import { getAccessToken } from "@/utils/request/utils";
 import { HttpStatusCode } from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-	const [user, setUser] = useState({
-		name: "",
-		avatar: "",
-		status: "",
-		roles: [],
-		enabled: false,
-	});
+	//user type :
+	// {
+	// 		name: "",
+	// 		avatar: "",
+	// 		status: "",
+	// 		roles: [],
+	// 		enabled: false,
+	// 	}
+	const [user, setUser] = useState(); // if user is not logged in the user will be trash value
 
 	useEffect(() => {
 		async function getUserInfo() {
-			const loggedIn = await userAlreadyLoggedIn();
-			if (!loggedIn) return;
-			navigate("HomeTab");
+			const accessToken = await getAccessToken();
+			console.log("UserProvider -> accessToken: " + accessToken);
 
 			const user = await getUserProfile((code) => {
 				switch (code) {
@@ -34,15 +41,47 @@ export function UserProvider({ children }) {
 				setUser(user);
 			}
 		}
-
 		getUserInfo();
-	});
+
+		const loginEvent = addEventListener(EventName.LOGIN, ({ name }) => {
+			console.log("User logged in with name: " + name + " in UserProvider");
+			setUser({ name });
+		});
+
+		const logoutEvent = addEventListener(EventName.LOGOUT, () => {
+			console.log("User logged out in UserProvider");
+			setUser(null);
+		});
+
+		return () => {
+			loginEvent.remove();
+			logoutEvent.remove();
+		};
+	}, []);
 
 	return (
 		<UserContext.Provider value={{ user, setUser }}>
 			{children}
 		</UserContext.Provider>
 	);
+}
+
+export function useLoggedIn() {
+	const [isLoading, setIsLoading] = useState(true);
+	const [loggedIn, setLoggedIn] = useState(false);
+
+	useEffect(() => {
+		async function checkUserLoggedIn() {
+			const loggedIn = await userAlreadyLoggedIn();
+			setLoggedIn(loggedIn);
+			setIsLoading(false);
+			if (!loggedIn) {
+			}
+		}
+		checkUserLoggedIn();
+	}, []);
+
+	return { isLoading, loggedIn };
 }
 
 export function useUserContext() {
