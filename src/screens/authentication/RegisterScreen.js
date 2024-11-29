@@ -19,6 +19,7 @@ import Toast from "react-native-toast-message";
 import { useRef, useState } from "react";
 import { ScreenName } from "@/constants/ScreenName";
 import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
+import BackHomeLogo from "@/components/BackHomeLogo";
 
 function RegisterScreen() {
 	const navigation = useNavigation();
@@ -110,18 +111,13 @@ function RegisterScreen() {
 
 	return (
 		<ThemedView className="flex-1 justify-center items-center px-4">
-			<Image
-				source={logo}
+			<BackHomeLogo
 				style={{
-					width: 160,
-					height: 160,
-					borderRadius: 80,
-					marginBottom: 30,
 					borderWidth: 4,
 					borderColor: "#fff",
 				}}
+				className="rounded-full mb-7 w-40 h-40 shadow-lg"
 			/>
-
 			<ThemedValidTextInput
 				value={name}
 				onChangeText={onNameChange}

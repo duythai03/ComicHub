@@ -1,5 +1,5 @@
 import { View, ScrollView, TextInput } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
 import Slider from "../components/Slider";
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ import { lightTheme, darkTheme } from "../utils/Theme";
 import { useTheme } from "../utils/Context";
 import LoadingCircle from "../components/LoadingCircle";
 import { useNavigation } from "@react-navigation/native";
+import ComicList from "@/components/ComicList";
 import ComicList from "@/components/ComicList";
 
 export default function HomeScreen() {

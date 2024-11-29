@@ -4,7 +4,8 @@
 		"strict": true,
 		"paths": {
 			"@/*": ["./src/*"],
-			"R/*": ["./assets/*"]
+			"R/*": ["./assets/*"],
+			"T/*": ["./types/*"]
 		}
 	},
 	"include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]

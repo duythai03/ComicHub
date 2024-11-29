@@ -2,51 +2,125 @@ import { StorageKey } from "@/constants/AppProperties";
 import AppAsyncStorage from "../AppAsyncStorage";
 import { ENDPOINT } from "@/constants/Endpoint";
 import publicRequest from "./publicRequest";
+import { AxiosError, HttpStatusCode, InternalAxiosRequestConfig } from "axios";
+import { ScreenName } from "@/constants/ScreenName";
+import Toast, { ToastShowParams } from "react-native-toast-message";
+import { navigate } from "@/navigation/utils";
+
+export async function getAccessToken(): Promise<string | null> {
+	return AppAsyncStorage.getItem(StorageKey.ACCESS_TOKEN);
+}
+
+export async function getRefreshToken(): Promise<string | null> {
+	return AppAsyncStorage.getItem(StorageKey.REFRESH_TOKEN);
+}
+
+export async function saveAccessToken(accessToken: string): Promise<void> {
+	await AppAsyncStorage.setItem(StorageKey.ACCESS_TOKEN, accessToken);
+}
+
+export async function saveRefreshToken(refreshToken: string): Promise<void> {
+	await AppAsyncStorage.setItem(StorageKey.REFRESH_TOKEN, refreshToken);
+}
+
+export async function removeAccessToken(): Promise<void> {
+	await AppAsyncStorage.removeItem(StorageKey.ACCESS_TOKEN);
+}
+
+export async function removeRefreshToken(): Promise<void> {
+	await AppAsyncStorage.removeItem(StorageKey.REFRESH_TOKEN);
+}
+
+export async function clearToken(): Promise<void> {
+	await Promise.all([removeAccessToken(), removeRefreshToken()]);
+}
 
 export async function saveToken(
 	accessToken: string,
 	refreshToken: string,
 ): Promise<void> {
-	await AppAsyncStorage.setItem(StorageKey.ACCESS_TOKEN, accessToken);
-	await AppAsyncStorage.setItem(StorageKey.REFRESH_TOKEN, refreshToken);
+	await Promise.all([
+		saveAccessToken(accessToken),
+		saveRefreshToken(refreshToken),
+	]);
 }
 
-export async function refreshToken(): Promise<string | null> {
-	console.log("System has auto requested a new access token !!!");
+export function navigateToLogin(
+	params: object = {
+		screen: ScreenName.LOGIN,
+		purpose: "session-expired",
+	},
+	toastParams: ToastShowParams = {
+		type: "error",
+		text1: "Session expired",
+		text2: "Please login again",
+	},
+): void {
+	// logout without sending the refresh token back to server
+	navigate(ScreenName.LOGIN, params);
 
-	const refreshToken = await AppAsyncStorage.getItem(StorageKey.REFRESH_TOKEN);
+	Toast.show(toastParams);
+}
 
-	if (!refreshToken) {
-		console.log("No refresh token found when trying to refresh accessToken");
-		return null;
-	}
+export function NotLoggedInError(
+	config?: InternalAxiosRequestConfig<any>,
+	request?: any,
+): AxiosError {
+	return new AxiosError(
+		"You are not logged in",
+		HttpStatusCode.Unauthorized.toString(),
+		config,
+		request,
+		{
+			data: null,
+			status: HttpStatusCode.Unauthorized,
+			statusText: "You are not logged in",
+			headers: null as any,
+			config: null as any,
+		},
+	);
+}
 
-	const config = {
+export function getBearerTokenConfig(token: string, config?: any) {
+	return {
+		...config,
 		headers: {
-			Authorization: `Bearer ${refreshToken}`,
+			...config?.headers,
+			Authorization: `Bearer ${token}`,
 		},
 	};
+}
 
+export async function refreshToken() {
+	console.log("System has auto requested a new access token !!!");
+	const refreshToken = await AppAsyncStorage.getItem(StorageKey.REFRESH_TOKEN);
+	if (!refreshToken) {
+		console.log("No refresh token found when trying to refresh accessToken");
+		return Promise.reject(NotLoggedInError());
+	}
 	try {
 		const response = await publicRequest.post(
-			ENDPOINT.REFRESH_TOKEN,
+			ENDPOINT.REFRESH_TOKEN_V1,
 			null,
-			config,
+			getBearerTokenConfig(refreshToken),
 		);
 
-		const { accessToken, refreshToken } = response.data.accessToken;
+		if (!response) {
+			return Promise.reject(NotLoggedInError());
+		}
 
-		// make sure that token already saved before return
-		// await saveToken(accessToken, refreshToken);
+		const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+			response.data;
 
-		saveToken(accessToken, refreshToken);
+		await saveToken(newAccessToken, newRefreshToken);
 
-		return accessToken;
+		console.log("New access token has been saved !!!" + newAccessToken);
+		return newAccessToken;
 	} catch (error) {
 		console.log(
-			"Error refreshing accessToken when trying to refresh accessToken",
+			"Error refreshing accessToken when trying to refresh accessToken. Details: " +
+				error,
 		);
-		console.log("Details: ", error);
-		return null;
+		return Promise.reject(error);
 	}
 }

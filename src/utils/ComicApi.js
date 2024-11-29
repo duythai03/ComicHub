@@ -1,6 +1,8 @@
+import { ENDPOINT } from "@/constants/Endpoint";
 import axios from "axios";
 
-const apiBaseUrl = "https://comic-production.up.railway.app/api/v1";
+// const apiBaseUrl = "https://comic-production.up.railway.app/api/v1";
+const apiBaseUrl = `${ENDPOINT.BASE_URL}/v1`;
 const comicEndpoint = `${apiBaseUrl}/comics`;
 
 const comicApiCall = async (endpoints, params = {}) => {
