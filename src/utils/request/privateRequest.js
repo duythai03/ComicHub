@@ -12,10 +12,24 @@ import {
 import publicRequest from "./publicRequest";
 import { checkLoginBeforeRequest } from "./methods";
 import Toast from "react-native-toast-message";
+import { EventName } from "@/constants/EventName";
+import { emitEvent } from "../event";
+import {
+	handleNetworkError,
+	handleNetworkUnavailable,
+	isNetworkAvailable,
+} from "./retryRequest";
 
 let isRefreshing = false;
 let refreshSubscribers = [];
 let requestQueue = [];
+
+const privateRequest = axios.create({
+	baseURL: ENDPOINT.BASE_URL,
+	headers: {
+		"Content-Type": "application/json",
+	},
+});
 
 /**
  * Adds a callback to the refresh subscribers queue.
@@ -53,41 +67,108 @@ function processRequestQueue(newAccessToken, error) {
 	requestQueue = [];
 }
 
-const privateRequest = axios.create({
-	baseURL: ENDPOINT.BASE_URL,
-	headers: {
-		"Content-Type": "application/json",
-	},
-});
+/**
+ *  Handles token refreshing by adding the request to the queue.
+ *
+ *  @param {Object} config - Axios request configuration.
+ *  @param {AbortController} abortController - Abort controller for the request.
+ *  @param {string} url - Request URI.
+ *  @returns {Promise} Promise that resolves with the updated request configuration.
+ *  */
+function handleTokenRefreshing(config, abortController, url) {
+	return new Promise((resolve) => {
+		addRequestToQueue((newAccessToken) => {
+			if (newAccessToken) {
+				console.log(
+					`Token refreshed. Retrying request with new token for request uri ${url}`,
+				);
+				resolve(getBearerTokenConfig(newAccessToken, config));
+			} else {
+				console.log(
+					`Token refresh failed. Rejecting request for request uri ${url}`,
+				);
+				abortController.abort();
+				resolve({
+					...config,
+					signal: abortController.signal,
+				});
+			}
+		});
+	});
+}
 
 privateRequest.interceptors.request.use(
 	async (config) => {
-		// synchronous function to get the access token
-		if (isRefreshing) {
-			console.log("Refresh token in progress. Adding request to queue.");
-			return new Promise((resolve, reject) => {
-				addRequestToQueue((newAccessToken, error) => {
-					if (newAccessToken) {
-						console.log("Token refreshed. Retrying request...");
-						resolve(getBearerTokenConfig(newAccessToken, config));
-					} else {
-						console.log("Token refresh failed. Rejecting request...");
-						reject(error || NotLoggedInError());
-					}
-				});
-			});
+		const url = config.url;
+		const abortController = new AbortController();
+
+		if (!isNetworkAvailable()) {
+			return handleNetworkUnavailable(config);
+		} else if (isRefreshing) {
+			console.log(
+				`Refresh token in progress. Adding request with uri ${url} to queue`,
+			);
+			return handleTokenRefreshing(config, abortController, url);
 		}
 
 		const accessToken = await AppAsyncStorage.getItem(StorageKey.ACCESS_TOKEN);
-
 		if (accessToken) {
 			return getBearerTokenConfig(accessToken, config);
 		}
-
-		return config;
+		abortController.abort();
+		return { ...config, signal: abortController.signal };
 	},
 	(error) => Promise.reject(error),
 );
+
+/**
+ * Xử lý lỗi khi refresh token không thành công.
+ */
+function handleRefreshError(refreshError, config) {
+	switch (refreshError.status) {
+		case HttpStatusCode.Unauthorized:
+			clearToken();
+			emitEvent(EventName.LOGOUT);
+			if (config._navigate_to_login_if_unauthorized) {
+				navigateToLogin();
+			}
+			break;
+		case HttpStatusCode.Forbidden:
+			Toast.show({
+				type: "error",
+				text1: "Forbidden",
+				text2: "You don't have permission to access this resource",
+			});
+			break;
+		default:
+			break;
+	}
+}
+
+/**
+ * Waits for the token to be refreshed before retrying the request.
+ * @param {Object} config - Axios request configuration.
+ *
+ * @returns {Promise} Promise that resolves with the response or rejects with an error.
+ */
+function waitForTokenRefresh(config) {
+	const { url } = config;
+	return new Promise((resolve, reject) => {
+		addRefreshSubscriber((newAccessToken, error) => {
+			if (newAccessToken) {
+				console.log(
+					`Token refreshed. Retrying request with new token for request uri ${url}`,
+				);
+				resolve(publicRequest(getBearerTokenConfig(newAccessToken, config)));
+			} else {
+				console.log(
+					`Token refresh failed. Rejecting request for request uri ${url}`,
+				);
+				reject(error || NotLoggedInError());
+			}
+		});
+	});
+}
 
 privateRequest.interceptors.response.use(
 	(response) => {
@@ -95,6 +176,9 @@ privateRequest.interceptors.response.use(
 	},
 	async (error) => {
 		const config = error?.config;
+		if (error.message === "Network Error") {
+			return handleNetworkError(refreshError, config, privateRequest);
+		}
 
 		if (
 			error?.response?.status === HttpStatusCode.Unauthorized &&
@@ -117,42 +201,17 @@ privateRequest.interceptors.response.use(
 					return publicRequest(getBearerTokenConfig(newAccessToken, config));
 				} catch (error) {
 					console.log("Error refreshing token:", error.status);
+					// Notify all subscribers and retry queued requests
 					processRefreshSubscribers(null, error);
 					processRequestQueue(null, error);
-					switch (error.status) {
-						case HttpStatusCode.Unauthorized:
-							clearToken();
-							if (config.navigateToLogin) {
-								navigateToLogin();
-							}
-							break;
-						case HttpStatusCode.Forbidden:
-							Toast.show({
-								type: "error",
-								text1: "Forbidden",
-								text2: "You don't have permission to access this resource",
-							});
-							break;
-						default:
-					}
+
+					handleRefreshError(error, config);
 				}
 			}
 
 			console.log("Access token is still being refreshed...");
-			// If the token is still being refreshed, wait for it to complete and retry the request
-			return new Promise((resolve, reject) => {
-				addRefreshSubscriber((newAccessToken, error) => {
-					if (newAccessToken) {
-						console.log("Token refreshed. Retrying request...");
-						return resolve(
-							publicRequest(getBearerTokenConfig(newAccessToken, config)),
-						);
-					} else {
-						console.log("Token refresh failed. Rejecting request...");
-						return reject(error || NotLoggedInError());
-					}
-				});
-			});
+			// Nếu token đang được refresh, chờ đến khi hoàn thành và retry request
+			return waitForTokenRefresh(config);
 		}
 		return Promise.reject(error);
 	},

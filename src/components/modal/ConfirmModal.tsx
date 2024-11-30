@@ -1,5 +1,6 @@
 import { useThemeColor } from "@/theme/useThemeColor";
-import React from "react";
+import React, { useState } from "react";
+
 import { Modal, View, StyleSheet, ModalProps } from "react-native";
 import { ThemedText } from "../themed/ThemedText";
 import ThemedTouchableText from "../themed/ThemedTouchableText";
@@ -9,7 +10,7 @@ export type ConfirmModalProps = ModalProps & {
 	visible: boolean;
 	message: string;
 	onClose: () => void;
-	onConfirm: () => void;
+	onConfirm: () => Promise<void>;
 	confirmLoading?: boolean;
 	title?: string;
 	confirmText?: string;
@@ -20,7 +21,6 @@ export default function ConfirmModal({
 	visible,
 	onClose,
 	onConfirm,
-	confirmLoading,
 	title,
 	message,
 	confirmText = "Confirm",
@@ -31,6 +31,14 @@ export default function ConfirmModal({
 	const cancelTextColor = useThemeColor("cancelText");
 	const confirmButtonBackgroundColor = useThemeColor("confirmButton");
 	const cancelButtonBackgroundColor = useThemeColor("cancelButton");
+
+	const [confirmLoading, setConfirmLoading] = useState(false);
+
+	async function handleConfirm() {
+		setConfirmLoading(true);
+		await onConfirm();
+		setConfirmLoading(false);
+	}
 
 	return (
 		<Modal
@@ -111,7 +119,7 @@ export default function ConfirmModal({
 										backgroundColor: confirmButtonBackgroundColor,
 									},
 								]}
-								onPress={onConfirm}
+								onPress={handleConfirm}
 								style={[{ color: confirmTextColor }]}
 							>
 								{confirmText}
