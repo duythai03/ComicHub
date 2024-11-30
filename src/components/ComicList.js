@@ -36,7 +36,7 @@ export default function ComicList({ title, data }) {
           className="mt-1 text-sm font-semibold text-center"
           style={theme.text}
         >
-          {item.name.length > 24 ? item.name.slice(0, 10) + "..." : item.name}
+          {item.name.length > 15 ? item.name.slice(0, 15) + "..." : item.name}
         </Text>
       </View>
     );

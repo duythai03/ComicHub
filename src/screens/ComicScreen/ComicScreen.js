@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import GradientOverlay from "../components/GradientOverlay";
+import GradientOverlay from "../../components/GradientOverlay";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useQuery } from "@tanstack/react-query";
 import { fetchComicDetail } from "@/utils/ComicApi";
@@ -12,6 +12,7 @@ import { ThemedText } from "@/components/themed/ThemedText";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LoadingCircle from "@/components/LoadingCircle";
 import { LinearGradient } from "expo-linear-gradient";
+import ComicImage from "./ComicImage";
 import { useFavorite } from "@/contexts/FavoriteContext";
 
 export default function ComicScreen() {
@@ -110,38 +111,7 @@ export default function ComicScreen() {
       </ThemedView>
 
       {/* Comic Image */}
-      <View
-        style={{
-          width: widthImg,
-          height: heightImg,
-          position: "relative",
-        }}
-      >
-        <Image
-          source={{
-            uri: comic.thumbnailUrl,
-          }}
-          className="w-full h-full"
-        />
-        <GradientOverlay>
-          <Text className="text-white text-lg font-bold">{comic.name}</Text>
-          <Text className="text-gray-200 text-sm">
-            Tác giả:{" "}
-            {comic.authors && comic.authors[0]
-              ? comic.authors[0]
-              : "Đang cập nhập"}
-          </Text>
-          <View className="flex flex-row space-x-3">
-            {comic.categories.slice(0, 4).map((genre, index) => (
-              <View key={index} className="my-2">
-                <Text className="text-gray-200 text-sm p-1 border-[1px] border-white rounded-sm text-center">
-                  {genre.name}
-                </Text>
-              </View>
-            ))}
-          </View>
-        </GradientOverlay>
-      </View>
+      <ComicImage comic={comic} widthImg={widthImg} heightImg={heightImg} />
 
       {isLoading ? (
         <LoadingCircle />
