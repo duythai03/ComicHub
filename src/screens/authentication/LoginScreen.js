@@ -13,11 +13,10 @@ import { HttpStatusCode } from "axios";
 import Toast from "react-native-toast-message";
 import { ScreenName } from "@/constants/ScreenName";
 import BackHomeLogo from "@/components/BackHomeLogo";
-import { emitEvent, eventEmitter } from "@/components/event";
 import { EventName } from "@/constants/EventName";
 import ThemedMaterialsIcon from "@/components/themed/ThemedMaterialsIcon";
-import { Text, View } from "react-native";
-
+import { View } from "react-native";
+import { emitEvent } from "@/utils/event";
 
 function LoginScreen({ route }) {
 	const { params } = route;

@@ -3,8 +3,8 @@ import {
 	getFavoriteComicsV1,
 	unfavoriteComic,
 } from "@/apiServices/favoriteService";
-import { addEventListener } from "@/components/event";
 import { EventName } from "@/constants/EventName";
+import { addEventListener } from "@/utils/event";
 import { HttpStatusCode } from "axios";
 import {
 	createContext,
@@ -173,6 +173,7 @@ export function FavoriteProvider({ children }) {
 			await fetchNextPage();
 			setInitialFetching(false);
 		}
+
 		initialFetchPage();
 
 		const loginHandler = addEventListener(EventName.LOGIN, async () => {

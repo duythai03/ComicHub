@@ -1,6 +1,6 @@
 import { logout, userAlreadyLoggedIn } from "@/apiServices/authService";
 import { getUserProfile } from "@/apiServices/userService";
-import { addEventListener } from "@/components/event";
+import { addEventListener } from "@/utils/event";
 import { EventName } from "@/constants/EventName";
 import { getAccessToken } from "@/utils/request/utils";
 import { useNavigation } from "@react-navigation/native";
@@ -18,11 +18,14 @@ export function UserProvider({ children }) {
 	// 		status: "",
 	// 		roles: [],
 	// 		enabled: false,
+	// 		totalCreatedComics: 0,
 	// 	}
 	const [user, setUser] = useState(); // if user is not logged in the user will be trash value
 	const navigation = useNavigation();
+	const [logoutLoading, setLogoutLoading] = useState(false);
 
 	const handleLogout = async () => {
+		setLogoutLoading(true);
 		await logout(
 			(errorCode) => {
 				switch (errorCode) {
@@ -39,6 +42,7 @@ export function UserProvider({ children }) {
 				}
 			},
 		);
+		setLogoutLoading(false);
 	};
 
 	useEffect(() => {
@@ -61,10 +65,13 @@ export function UserProvider({ children }) {
 		}
 		getUserInfo();
 
-		const loginEvent = addEventListener(EventName.LOGIN, ({ name }) => {
-			console.log("User logged in with name: " + name + " in UserProvider");
-			setUser({ name });
-		});
+		const loginEvent = addEventListener(
+			EventName.LOGIN,
+			({ name, totalCreatedComics, avatar, status, roles, enabled }) => {
+				console.log("User logged in with name: " + name + " in UserProvider");
+				setUser({ name, totalCreatedComics, avatar, status, roles, enabled });
+			},
+		);
 
 		const logoutEvent = addEventListener(EventName.LOGOUT, () => {
 			console.log("User logged out in UserProvider");
@@ -78,7 +85,9 @@ export function UserProvider({ children }) {
 	}, []);
 
 	return (
-		<UserContext.Provider value={{ user, setUser, logout: handleLogout }}>
+		<UserContext.Provider
+			value={{ user, setUser, logout: handleLogout, logoutLoading }}
+		>
 			{children}
 		</UserContext.Provider>
 	);
@@ -107,6 +116,6 @@ export function useUserContext() {
 	if (!context) {
 		throw new Error("useUserContext must be used within a UserProvider");
 	}
-	const { user, setUser, logout } = context;
-	return { user, setUser, logout };
+	const { user, setUser, logout, logoutLoading } = context;
+	return { user, setUser, logout, logoutLoading };
 }

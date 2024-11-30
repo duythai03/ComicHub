@@ -2,6 +2,7 @@ import { ENDPOINT } from "@/constants/Endpoint";
 import privateRequest from "@/utils/request/privateRequest";
 import { ErrorHandler, SuccessHandler } from "./types";
 import { AxiosResponse } from "axios";
+import { AxiosRequestConfigExtends } from "T/axios-extends";
 
 export const favoriteComic = async (
 	comicId: string,
@@ -25,10 +26,14 @@ export const favoriteComic = async (
 	 * get the response
 	 */
 	onSuccess?: SuccessHandler,
+
+	config?: AxiosRequestConfigExtends,
 ) => {
 	try {
 		const response: AxiosResponse = await privateRequest.post(
 			ENDPOINT.ADD_FAVORITE_V1(comicId),
+			null,
+			config,
 		);
 		const { status, data } = response;
 		if (onSuccess && onSuccess(status, response) === false) {
@@ -63,10 +68,13 @@ export const unfavoriteComic = async (
 	 * after get the response
 	 */
 	onSuccess?: SuccessHandler,
+
+	config?: AxiosRequestConfigExtends,
 ) => {
 	try {
 		const response = await privateRequest.delete(
 			ENDPOINT.REMOVE_FAVORITE_V1(comicId),
+			config,
 		);
 		const { status } = response;
 		if (onSuccess && !onSuccess(status, response) === false) {
@@ -112,10 +120,13 @@ export const getFavoriteComicsV1 = async (
 	 */
 
 	onSuccess?: SuccessHandler,
+
+	config?: AxiosRequestConfigExtends,
 ) => {
 	try {
 		pagination_params.size = pagination_params.size || 20;
 		const response = await privateRequest.get(ENDPOINT.GET_FAVORITE_V1, {
+			...config,
 			params: pagination_params,
 		});
 
@@ -131,8 +142,10 @@ export const getFavoriteComicsV1 = async (
 		return data;
 	} catch (error: any) {
 		console.log(
-			"Error when fetch favorite comics with status code: ",
-			error.status,
+			"Error when fetch favorite comics " +
+				error +
+				" statusCode: " +
+				error?.status,
 		);
 		return onError(error.status, error);
 	}

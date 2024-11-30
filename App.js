@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeStack from "@/navigation/HomeStack";
 import { FavoriteProvider } from "@/contexts/FavoriteContext";
 import { navigationRef } from "@/navigation/utils";
+import NetworkStatusObserver from "@/components/NetworkStatusObserver";
 
 const queryClient = new QueryClient();
 
@@ -38,16 +39,18 @@ function SafeApp() {
 export default function App() {
 	return (
 		<NavigationContainer ref={navigationRef}>
-			<QueryClientProvider client={queryClient}>
-				<GestureHandlerRootView>
-					<ThemeProviderV2>
-						<ThemeProviderV1>
-							<SafeApp />
-							<Toast />
-						</ThemeProviderV1>
-					</ThemeProviderV2>
-				</GestureHandlerRootView>
-			</QueryClientProvider>
+			<NetworkStatusObserver>
+				<QueryClientProvider client={queryClient}>
+					<GestureHandlerRootView>
+						<ThemeProviderV2>
+							<ThemeProviderV1>
+								<SafeApp />
+								<Toast />
+							</ThemeProviderV1>
+						</ThemeProviderV2>
+					</GestureHandlerRootView>
+				</QueryClientProvider>
+			</NetworkStatusObserver>
 		</NavigationContainer>
 	);
 }

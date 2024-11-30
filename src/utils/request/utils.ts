@@ -1,11 +1,12 @@
 import { StorageKey } from "@/constants/AppProperties";
 import AppAsyncStorage from "../AppAsyncStorage";
 import { ENDPOINT } from "@/constants/Endpoint";
-import publicRequest from "./publicRequest";
 import { AxiosError, HttpStatusCode, InternalAxiosRequestConfig } from "axios";
 import { ScreenName } from "@/constants/ScreenName";
 import Toast, { ToastShowParams } from "react-native-toast-message";
 import { navigate } from "@/navigation/utils";
+import publicRequest from "./publicRequest";
+import { AxiosRequestConfigExtends } from "T/axios-extends";
 
 export async function getAccessToken(): Promise<string | null> {
 	return AppAsyncStorage.getItem(StorageKey.ACCESS_TOKEN);
@@ -72,7 +73,7 @@ export function NotLoggedInError(
 		config,
 		request,
 		{
-			data: null,
+			data: {},
 			status: HttpStatusCode.Unauthorized,
 			statusText: "You are not logged in",
 			headers: null as any,
@@ -81,7 +82,10 @@ export function NotLoggedInError(
 	);
 }
 
-export function getBearerTokenConfig(token: string, config?: any) {
+export function getBearerTokenConfig(
+	token: string,
+	config?: AxiosRequestConfigExtends,
+) {
 	return {
 		...config,
 		headers: {

@@ -1,4 +1,5 @@
 import ThemeButton from "@/components/ThemeButton";
+import { ThemedLoadingCircle } from "@/components/themed";
 import ThemedMaterialsIcon from "@/components/themed/ThemedMaterialsIcon";
 import { ThemedText } from "@/components/themed/ThemedText";
 import ThemedTouchableText from "@/components/themed/ThemedTouchableText";
@@ -11,7 +12,7 @@ import React from "react";
 import { Button, Image } from "react-native";
 
 export default function ProfileScreen() {
-	const { user, logout } = useUserContext();
+	const { user, logout, logoutLoading } = useUserContext();
 	const navigation = useNavigation();
 	const errorColor = useThemeColor("error");
 
@@ -32,7 +33,6 @@ export default function ProfileScreen() {
 				</ThemedTouchableText>
 			</ThemedView>
 		);
-
 	}
 
 	return (
@@ -56,7 +56,9 @@ export default function ProfileScreen() {
 				</ThemedView>
 				<ThemedView className="ml-4 flex-col items-center flex-1">
 					<ThemedView className="flex-col items-center space-x-2">
-						<ThemedText className="text-xl font-bold">42</ThemedText>
+						<ThemedText className="text-xl font-bold">
+							{user?.totalCreatedComics}
+						</ThemedText>
 						<ThemedText className="text-lg ">Comics</ThemedText>
 					</ThemedView>
 
@@ -67,7 +69,9 @@ export default function ProfileScreen() {
 				</ThemedView>
 			</ThemedView>
 			<ThemeButton title="Edit Profile" />
-			<Button title="Logout" onPress={logout} />
+			{(logoutLoading && (
+				<ThemedLoadingCircle size="small" loading={logoutLoading} />
+			)) || <Button title="Logout" onPress={logout} />}
 		</ThemedView>
 	);
 }

@@ -1,17 +1,18 @@
 import { ENDPOINT } from "@/constants/Endpoint";
 import publicRequest from "@/utils/request/publicRequest";
 import {
+	clearToken,
 	getBearerTokenConfig,
 	getRefreshToken,
-	NotLoggedInError,
 	saveToken,
 } from "@/utils/request/utils";
-import { AxiosRequestConfig, AxiosResponse, HttpStatusCode } from "axios";
+import { AxiosResponse, HttpStatusCode } from "axios";
 import { ErrorHandler, SuccessHandler } from "./types";
 import AppAsyncStorage from "@/utils/AppAsyncStorage";
 import { StorageKey } from "@/constants/AppProperties";
-import { emitEvent, eventEmitter } from "@/components/event";
 import { EventName } from "@/constants/EventName";
+import { emitEvent } from "@/utils/event";
+import { AxiosRequestConfigExtends } from "T/axios-extends";
 
 export async function userAlreadyLoggedIn() {
 	const [accessToken, refreshToken] = await Promise.all([
@@ -50,9 +51,14 @@ export async function login(
 	 */
 	onSuccess?: SuccessHandler,
 
-	config?: AxiosRequestConfig<any>,
+	config?: AxiosRequestConfigExtends,
 ) {
 	try {
+		config = {
+			...config,
+			_skip_no_network_retry: true,
+		};
+
 		const response: AxiosResponse = await publicRequest.post(
 			ENDPOINT.LOGIN_V1,
 			requestBody,
@@ -69,7 +75,10 @@ export async function login(
 		}
 		return {};
 	} catch (error: any) {
-		console.log("Login unsuccessful with status code: ", error.status);
+		console.log(
+			"Login unsuccessful " + error + " with status code: ",
+			error.status,
+		);
 		return onError(error.status, error);
 	}
 }
@@ -102,7 +111,7 @@ export async function register(
 	onSuccess?: SuccessHandler,
 
 	// Optional config for axios
-	config?: AxiosRequestConfig<any>,
+	config?: AxiosRequestConfigExtends,
 ) {
 	try {
 		const response: AxiosResponse = await publicRequest.post(
@@ -116,7 +125,10 @@ export async function register(
 		}
 		return data;
 	} catch (error: any) {
-		console.log("Register unsuccessful with status code: ", error.status);
+		console.log(
+			"Register unsuccessful " + error + " with status code: ",
+			error.status,
+		);
 		return onError(error.status, error);
 	}
 }
@@ -144,7 +156,7 @@ export async function logout(
 	onSuccess?: SuccessHandler,
 
 	// Optional config for axios
-	config?: AxiosRequestConfig<any>,
+	config?: AxiosRequestConfigExtends,
 ) {
 	try {
 		const refreshToken = await getRefreshToken();
@@ -154,16 +166,23 @@ export async function logout(
 		const response: AxiosResponse = await publicRequest.post(
 			ENDPOINT.LOGOUT_V1,
 			{},
-			getBearerTokenConfig(refreshToken, config),
+			getBearerTokenConfig(refreshToken, {
+				...config,
+				_skip_no_network_retry: true,
+			}),
 		);
 		const { status } = response;
+		await clearToken();
 		emitEvent(EventName.LOGOUT);
 
 		if (onSuccess && onSuccess(status, response) === false) {
 			return;
 		}
 	} catch (error: any) {
-		console.log("Logout unsuccessful with status code: ", error.status);
+		console.log(
+			"Logout unsuccessful " + error + " with status code: ",
+			error.status,
+		);
 		return onError(error.status, error);
 	}
 }
