@@ -1,9 +1,8 @@
 import { View, Text, Dimensions, Image, FlatList } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import GradientOverlay from "../../components/GradientOverlay";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useQuery } from "@tanstack/react-query";
 import { fetchComicDetail } from "@/utils/ComicApi";
@@ -35,6 +34,24 @@ export default function ComicScreen() {
       console.log(error);
     },
   });
+
+  const { addFavoriteComic, removeFavoriteComic, isFavorite } = useFavorite();
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    if (comic) {
+      setIsLiked(isFavorite(comic.id)); // Kiểm tra xem truyện có trong danh sách yêu thích không
+    }
+  }, [comic, isFavorite]);
+
+  const toggleFavorite = () => {
+    if (isLiked) {
+      removeFavoriteComic(comic.id); // Xóa khỏi danh sách yêu thích
+    } else {
+      addFavoriteComic(comic); // Thêm vào danh sách yêu thích
+    }
+    setIsLiked(!isLiked);
+  };
 
   const [showFullSummary, setShowFullSummary] = useState(false);
 
@@ -80,10 +97,14 @@ export default function ComicScreen() {
 
       {/* Favourite Button */}
       <TouchableOpacity
-        className="absolute top-8 right-14 z-10 bg-black p-2 rounded-full opacity-50"
-        onPress={() => console.log("Favourite")}
+        className="absolute top-8 right-14 z-10 bg-black p-2 rounded-full opacity-70"
+        onPress={toggleFavorite}
       >
-        <AntDesign name="heart" size={24} color="white" />
+        <AntDesign
+          name="heart"
+          size={24}
+          color={isLiked ? "#c226f1" : "white"}
+        />
       </TouchableOpacity>
 
       {/* Read Fisrt Chapter Button */}
@@ -95,7 +116,9 @@ export default function ComicScreen() {
       >
         <LinearGradient
           colors={["#c226f1", "#9e30ec"]}
-          className="w-8/12 h-10 rounded-xl"
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          className="h-12 rounded-xl flex justify-center items-center w-10/12"
         >
           <TouchableOpacity
             onPress={() =>
@@ -104,8 +127,11 @@ export default function ComicScreen() {
                 chapter: comicDetail?.chapters.content[0],
               })
             }
+            className="flex justify-center items-center"
           >
-            <ThemedText className="text-white">Đọc tập đầu</ThemedText>
+            <ThemedText className="text-white font-bold text-xl">
+              Đọc tập đầu
+            </ThemedText>
           </TouchableOpacity>
         </LinearGradient>
       </ThemedView>
