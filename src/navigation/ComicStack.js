@@ -1,6 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ComicScreen from "../screens/ComicScreen";
+import ComicScreen from "../screens/ComicScreen/ComicScreen";
 import ReadingScreen from "../screens/ReadingScreen";
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +18,14 @@ export default function ComicStack({ route }) {
         component={ComicScreen}
         initialParams={route?.params}
       />
-      <Stack.Screen name="Reading" component={ReadingScreen} />
+      <Stack.Screen
+        name="Reading"
+        component={ReadingScreen}
+        options={({ route }) => ({
+          headerShown: true,
+          headerTitle: route.params?.chapter?.chapter || "Reading",
+        })}
+      />
     </Stack.Navigator>
   );
 }

@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-export default function GenreScreen() {
+export default function FavouriteScreen() {
   return (
     <View>
-      <Text>GenreScreen</Text>
+      <Text>FavouriteScreen</Text>
     </View>
   );
 }
