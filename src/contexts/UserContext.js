@@ -1,14 +1,12 @@
-import { userAlreadyLoggedIn } from "@/apiServices/authService";
+import { logout, userAlreadyLoggedIn } from "@/apiServices/authService";
 import { getUserProfile } from "@/apiServices/userService";
-import {
-	addEventListener,
-	addListener,
-	eventEmitter,
-} from "@/components/event";
+import { addEventListener } from "@/utils/event";
 import { EventName } from "@/constants/EventName";
 import { getAccessToken } from "@/utils/request/utils";
+import { useNavigation } from "@react-navigation/native";
 import { HttpStatusCode } from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
 
 const UserContext = createContext();
 
@@ -20,8 +18,32 @@ export function UserProvider({ children }) {
 	// 		status: "",
 	// 		roles: [],
 	// 		enabled: false,
+	// 		totalCreatedComics: 0,
 	// 	}
 	const [user, setUser] = useState(); // if user is not logged in the user will be trash value
+	const navigation = useNavigation();
+	const [logoutLoading, setLogoutLoading] = useState(false);
+
+	const handleLogout = async () => {
+		setLogoutLoading(true);
+		await logout(
+			(errorCode) => {
+				switch (errorCode) {
+					default:
+						Toast.show({
+							type: "error",
+							text1: "Error when logging out",
+						});
+				}
+			},
+			(successCode) => {
+				if (successCode === HttpStatusCode.NoContent) {
+					navigation.navigate("HomeTab", { screen: "Home" });
+				}
+			},
+		);
+		setLogoutLoading(false);
+	};
 
 	useEffect(() => {
 		async function getUserInfo() {
@@ -43,10 +65,13 @@ export function UserProvider({ children }) {
 		}
 		getUserInfo();
 
-		const loginEvent = addEventListener(EventName.LOGIN, ({ name }) => {
-			console.log("User logged in with name: " + name + " in UserProvider");
-			setUser({ name });
-		});
+		const loginEvent = addEventListener(
+			EventName.LOGIN,
+			({ name, totalCreatedComics, avatar, status, roles, enabled }) => {
+				console.log("User logged in with name: " + name + " in UserProvider");
+				setUser({ name, totalCreatedComics, avatar, status, roles, enabled });
+			},
+		);
 
 		const logoutEvent = addEventListener(EventName.LOGOUT, () => {
 			console.log("User logged out in UserProvider");
@@ -60,7 +85,9 @@ export function UserProvider({ children }) {
 	}, []);
 
 	return (
-		<UserContext.Provider value={{ user, setUser }}>
+		<UserContext.Provider
+			value={{ user, setUser, logout: handleLogout, logoutLoading }}
+		>
 			{children}
 		</UserContext.Provider>
 	);
@@ -89,5 +116,6 @@ export function useUserContext() {
 	if (!context) {
 		throw new Error("useUserContext must be used within a UserProvider");
 	}
-	return context;
+	const { user, setUser, logout, logoutLoading } = context;
+	return { user, setUser, logout, logoutLoading };
 }

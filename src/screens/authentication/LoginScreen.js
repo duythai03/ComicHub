@@ -13,14 +13,15 @@ import { HttpStatusCode } from "axios";
 import Toast from "react-native-toast-message";
 import { ScreenName } from "@/constants/ScreenName";
 import BackHomeLogo from "@/components/BackHomeLogo";
-import { emitEvent, eventEmitter } from "@/components/event";
 import { EventName } from "@/constants/EventName";
+import ThemedMaterialsIcon from "@/components/themed/ThemedMaterialsIcon";
+import { View } from "react-native";
+import { emitEvent } from "@/utils/event";
 
 function LoginScreen({ route }) {
 	const { params } = route;
 	const navigation = useNavigation();
 	const [loading, setLoading] = useState(false);
-	const { setUser } = useUserContext();
 	const {
 		value: username,
 		onChangeText: onUsernameChange,
@@ -35,6 +36,7 @@ function LoginScreen({ route }) {
 		value: password,
 		onChangeText: onPasswordChange,
 		errorMessage: passwordErrorMessage,
+		setErrorMessage: setPasswordErrorMessage,
 		validate: validatePassword,
 	} = useValidation("", [Required]);
 
@@ -74,7 +76,7 @@ function LoginScreen({ route }) {
 	};
 
 	const navigateToRegister = () => {
-		navigation.navigate("RegisterScreen");
+		navigation.navigate(ScreenName.REGISTER, { from: ScreenName.LOGIN });
 	};
 
 	const handleForgotPassword = () => {
@@ -83,11 +85,18 @@ function LoginScreen({ route }) {
 
 	return (
 		<ThemedView
-			className="flex-1 justify-center items-center px-4"
+			className="flex-1 justify-center items-center px-4 relative"
 			style={{
 				backgroundColor: "transparent",
 			}}
 		>
+			{params?.from && (
+				<View className="absolute top-4 left-0 p-4 opacity-80">
+					<TouchableOpacity onPress={() => navigation.goBack()}>
+						<ThemedMaterialsIcon name="arrow-back" size={36} />
+					</TouchableOpacity>
+				</View>
+			)}
 			<BackHomeLogo
 				style={{ borderWidth: 4, borderColor: "white" }}
 				className="rounded-full mb-12 w-40 h-40 shadow-lg"

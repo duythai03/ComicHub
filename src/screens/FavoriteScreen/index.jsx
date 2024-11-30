@@ -1,16 +1,17 @@
 import { ThemedText } from "@/components/themed/ThemedText";
 import { ThemedView } from "@/components/themed/ThemedView";
-import React, { useState } from "react";
+import React from "react";
 import { FlatList } from "react-native";
 import FavoriteComic from "@/components/FavoriteComic";
-import { ThemedLoadingCircle } from "@/components/themed";
+import { ThemedLoadingCircle, ThemedSearchBar } from "@/components/themed";
 import ErrorComponent from "./ErrorComponent";
 import { useNavigation } from "@react-navigation/native";
 import { useFavorite } from "@/contexts/FavoriteContext";
+import { formatTimeAgo } from "@/utils/dateago";
 
 function FavoriteScreen() {
 	const navigation = useNavigation();
-	const [isRemoving, setIsRemoving] = useState(false);
+
 	const {
 		error,
 		favoriteComics,
@@ -21,6 +22,7 @@ function FavoriteScreen() {
 		fetchNextPage,
 		atomicFetchNextPage,
 
+		addFavoriteComic,
 		removeFavoriteComic,
 	} = useFavorite();
 
@@ -41,6 +43,7 @@ function FavoriteScreen() {
 					/>
 				)) || (
 					<>
+						{/* <ThemedSearchBar className="mb-4" /> */}
 						<FlatList
 							className="h-full"
 							data={favoriteComics}
@@ -48,6 +51,7 @@ function FavoriteScreen() {
 							columnWrapperStyle={{ justifyContent: "space-between" }}
 							onEndReachedThreshold={0.8}
 							onEndReached={atomicFetchNextPage}
+							keyExtractor={(item, index) => item.id || index.toString()}
 							renderItem={({ item, index }) => {
 								return (
 									<FavoriteComic
@@ -58,22 +62,18 @@ function FavoriteScreen() {
 												comic: item,
 											});
 										}}
-										onUnFavorite={async (setModalVisible) => {
-											setIsRemoving(true);
+										onUnFavorite={async (closeModal) => {
 											await removeFavoriteComic(item.id);
-											setIsRemoving(false);
-											setModalVisible(false);
 										}}
-										modalProps={{ confirmLoading: isRemoving }}
 										name={item.name}
 										imageUri={item.thumbnailUrl}
-										updatedAt="2 days ago"
+										updatedAt={formatTimeAgo(item?.newChapterUpdatedAt)}
 									/>
 								);
 							}}
 						/>
 						{nextPageFetching && (
-							<ThemedView className="w-full flex flex-row justify-center items-center">
+							<ThemedView className="w-full flex flex-row justify-center items-center py-4">
 								<ThemedLoadingCircle size="small" loading={nextPageFetching} />
 							</ThemedView>
 						)}

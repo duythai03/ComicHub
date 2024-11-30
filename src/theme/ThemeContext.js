@@ -42,5 +42,13 @@ export function useThemeContext() {
 	if (!context) {
 		throw new Error("useThemeContext must be used within a ThemeProvider");
 	}
-	return context;
+	const { theme, setTheme, isDarkMode, toggleDarkTheme, colors } = context;
+
+	return {
+		theme,
+		setTheme,
+		isDarkMode,
+		toggleDarkTheme,
+		colors,
+	};
 }

@@ -1,4 +1,7 @@
 export const EventName = {
 	LOGIN: "LOGIN",
 	LOGOUT: "LOGOUT",
+
+	NO_INTERNET: "NO_INTERNET",
+	INTERNET_BACK: "INTERNET_BACK",
 };

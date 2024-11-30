@@ -1,22 +1,24 @@
 import { navigateToLogin, NotLoggedInError } from "./utils";
 import { userAlreadyLoggedIn } from "@/apiServices/authService";
 
-const axios_methods = [
-	"get",
-	"delete",
-	"head",
-	"options",
-	"post",
-	"put",
-	"patch",
-	"postForm",
-	"putForm",
-	"patchForm",
-	"request",
-];
+// key : method name
+// value : position of config object in the arguments
+const axios_methods = {
+	get: 1,
+	post: 2,
+	put: 2,
+	patch: 2,
+	delete: 1,
+	head: 1,
+	options: 1,
+	postForm: 2,
+	putForm: 2,
+	patchForm: 2,
+	request: 1,
+};
 
 export function checkLoginBeforeRequest(instance) {
-	for (const method of axios_methods) {
+	for (const method in axios_methods) {
 		const originalMethod = instance[method];
 
 		instance[method] = async function (url, ...args) {
@@ -26,7 +28,7 @@ export function checkLoginBeforeRequest(instance) {
 					"User not logged in while making request with method: ",
 					method.toUpperCase(),
 				);
-				const config = method === "get" ? args[0] : args[1];
+				const config = args[axios_methods[method]];
 
 				if (config && config.navigateToLogin) {
 					navigateToLogin();
