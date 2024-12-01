@@ -12,6 +12,7 @@ import HomeStack from "@/navigation/HomeStack";
 import { FavoriteProvider } from "@/contexts/FavoriteContext";
 import { navigationRef } from "@/navigation/utils";
 import NetworkStatusObserver from "@/components/NetworkStatusObserver";
+import { NetworkQueue } from "@/utils/request/retryRequest";
 
 const queryClient = new QueryClient();
 
@@ -40,16 +41,18 @@ export default function App() {
 	return (
 		<NavigationContainer ref={navigationRef}>
 			<NetworkStatusObserver>
-				<QueryClientProvider client={queryClient}>
-					<GestureHandlerRootView>
-						<ThemeProviderV2>
-							<ThemeProviderV1>
-								<SafeApp />
-								<Toast />
-							</ThemeProviderV1>
-						</ThemeProviderV2>
-					</GestureHandlerRootView>
-				</QueryClientProvider>
+				<NetworkQueue>
+					<QueryClientProvider client={queryClient}>
+						<GestureHandlerRootView>
+							<ThemeProviderV2>
+								<ThemeProviderV1>
+									<SafeApp />
+									<Toast />
+								</ThemeProviderV1>
+							</ThemeProviderV2>
+						</GestureHandlerRootView>
+					</QueryClientProvider>
+				</NetworkQueue>
 			</NetworkStatusObserver>
 		</NavigationContainer>
 	);

@@ -1,5 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 
 let retryQueue = [];
 let networkAvailable = true;
@@ -15,17 +16,27 @@ const processRetryQueue = (...args) => {
 	retryQueue = [];
 };
 
-NetInfo.addEventListener((state) => {
-	networkAvailable = state.isInternetReachable;
+export const NetworkQueue = ({ children }) => {
+	useEffect(() => {
+		const unsubcribe = NetInfo.addEventListener((state) => {
+			networkAvailable = state.isInternetReachable;
 
-	console.log(
-		`Network Available: ${networkAvailable} - Retry Queue Length: ${retryQueue.length}`,
-	);
+			console.log(
+				`Network Available: ${networkAvailable} - Retry Queue Length: ${retryQueue.length}`,
+			);
 
-	if (retryQueue.length > 0 && networkAvailable) {
-		processRetryQueue();
-	}
-});
+			if (retryQueue.length > 0 && networkAvailable) {
+				processRetryQueue();
+			}
+		});
+
+		return () => {
+			unsubcribe();
+		};
+	}, []);
+
+	return children;
+};
 
 /**
  * Handle network unavailable

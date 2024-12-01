@@ -75,7 +75,7 @@ function processRequestQueue(newAccessToken, error) {
  *  @param {string} url - Request URI.
  *  @returns {Promise} Promise that resolves with the updated request configuration.
  *  */
-function handleAccessTokenRefreshing(config, abortController) {
+async function handleAccessTokenRefreshing(config, abortController) {
 	return new Promise((resolve) => {
 		addRequestToQueue((newAccessToken) => {
 			const url = config.url;
@@ -85,6 +85,9 @@ function handleAccessTokenRefreshing(config, abortController) {
 				);
 				resolve(getBearerTokenConfig(newAccessToken, config));
 			} else if (config._optional_jwt_auth) {
+				console.log(
+					`Token refresh failed but jwt auth is optional. Proceeding with request without token for request uri ${url}`,
+				);
 				return config;
 			} else {
 				console.log(
@@ -123,7 +126,7 @@ async function getBearerAccessTokenConfig(config, abortController) {
 	} else if (config._optional_jwt_auth) {
 		return config;
 	}
-	abortController.abort();
+	abortController.abort("No access token found");
 	return { ...config, signal: abortController.signal };
 }
 
