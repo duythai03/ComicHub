@@ -34,12 +34,10 @@ export default function ComicScreen() {
 	const [sortUp, setSortUp] = useState(true);
 	const { addFavoriteComic, removeFavoriteComic } = useFavorite();
 	const [isLiked, setIsLiked] = useState(false);
-	const queryClient = useQueryClient();
 
 	const { isLoading } = useQuery({
 		queryKey: ["comicDetail"],
 		queryFn: () => fetchComicDetail(comic.id),
-		staleTime: 0,
 		onSuccess: (data) => {
 			setComicDetail(data);
 			setIsLiked(data.followed === true);
@@ -52,17 +50,8 @@ export default function ComicScreen() {
 	const toggleFavorite = () => {
 		if (isLiked) {
 			removeFavoriteComic(comic.id); // Xóa khỏi danh sách yêu thích
-			queryClient.setQueryData(["comicDetail"], (oldData) => {
-				return {
-					...oldData,
-					followed: false,
-				};
-			});
 		} else {
 			addFavoriteComic(comic); // Thêm vào danh sách yêu thích
-			queryClient.setQueryData(["comicDetail"], (oldData) => {
-				return { ...oldData, followed: true };
-			});
 		}
 		setIsLiked(!isLiked);
 	};
