@@ -15,14 +15,14 @@ import Toast from "react-native-toast-message";
 import { EventName } from "@/constants/EventName";
 import { emitEvent } from "../event";
 import {
+	addRequestToRetryQueue,
 	handleNetworkError,
-	handleNetworkUnavailable,
 	isNetworkAvailable,
 } from "./retryRequest";
 
 let isRefreshing = false;
-let refreshSubscribers = [];
 let requestQueue = [];
+let refreshSubscribers = [];
 
 const privateRequest = axios.create({
 	baseURL: ENDPOINT.BASE_URL,
@@ -75,14 +75,17 @@ function processRequestQueue(newAccessToken, error) {
  *  @param {string} url - Request URI.
  *  @returns {Promise} Promise that resolves with the updated request configuration.
  *  */
-function handleTokenRefreshing(config, abortController, url) {
+function handleAccessTokenRefreshing(config, abortController) {
 	return new Promise((resolve) => {
 		addRequestToQueue((newAccessToken) => {
+			const url = config.url;
 			if (newAccessToken) {
 				console.log(
 					`Token refreshed. Retrying request with new token for request uri ${url}`,
 				);
 				resolve(getBearerTokenConfig(newAccessToken, config));
+			} else if (config._optional_jwt_auth) {
+				return config;
 			} else {
 				console.log(
 					`Token refresh failed. Rejecting request for request uri ${url}`,
@@ -97,26 +100,74 @@ function handleTokenRefreshing(config, abortController, url) {
 	});
 }
 
+/**
+ * Returns the request configuration with the bearer token.
+ *
+ *  @param {Object} config - Axios request configuration.
+ *  @param {AbortController} abortController  - Abort controller for the request.
+ *
+ *  @returns {Promise}
+ * */
+async function getBearerAccessTokenConfig(config, abortController) {
+	// lock the request until the token is refreshed
+	if (isRefreshing) {
+		console.log(
+			`Refresh token in progress. Adding request with uri ${url} to queue`,
+		);
+		return handleAccessTokenRefreshing(config);
+	}
+
+	const accessToken = await AppAsyncStorage.getItem(StorageKey.ACCESS_TOKEN);
+	if (accessToken) {
+		return getBearerTokenConfig(accessToken, config);
+	} else if (config._optional_jwt_auth) {
+		return config;
+	}
+	abortController.abort();
+	return { ...config, signal: abortController.signal };
+}
+
+/**
+ * Handle network unavailable
+ * @param {import("T/axios-extends").AxiosRequestConfigExtends} config
+ * @param {AbortController} abortController
+ * @returns {Promise} Promise
+ */
+async function handleNetworkUnavailable(config, abortController) {
+	if (config._skip_no_network_retry) {
+		return getBearerAccessTokenConfig(config, abortController);
+	}
+
+	console.log(
+		"Network unavailable. Adding request to retry queue for request uri",
+		config.url,
+	);
+
+	// check again if network is available to avoid network is available but retryQueue is not processed
+	if (isNetworkAvailable()) return getBearerAccessTokenConfig();
+	return new Promise((resolve) => {
+		const retry = async function () {
+			console.log(
+				"Netwoek available. Retrying request for request uri",
+				config.url,
+			);
+			const valid_config = await getBearerAccessTokenConfig(
+				config,
+				abortController,
+			);
+			resolve(valid_config);
+		};
+		addRequestToRetryQueue(retry);
+	});
+}
+
 privateRequest.interceptors.request.use(
 	async (config) => {
-		const url = config.url;
 		const abortController = new AbortController();
-
 		if (!isNetworkAvailable()) {
-			return handleNetworkUnavailable(config);
-		} else if (isRefreshing) {
-			console.log(
-				`Refresh token in progress. Adding request with uri ${url} to queue`,
-			);
-			return handleTokenRefreshing(config, abortController, url);
+			return handleNetworkUnavailable(config, abortController);
 		}
-
-		const accessToken = await AppAsyncStorage.getItem(StorageKey.ACCESS_TOKEN);
-		if (accessToken) {
-			return getBearerTokenConfig(accessToken, config);
-		}
-		abortController.abort();
-		return { ...config, signal: abortController.signal };
+		return getBearerAccessTokenConfig(config, abortController);
 	},
 	(error) => Promise.reject(error),
 );

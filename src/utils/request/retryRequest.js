@@ -29,30 +29,6 @@ NetInfo.addEventListener((state) => {
 
 /**
  * Handle network unavailable
- * @param {import("T/axios-extends").AxiosRequestConfigExtends} config
- * @returns {Promise} Promise
- */
-export function handleNetworkUnavailable(config) {
-	if (config._skip_no_network_retry) {
-		return config;
-	}
-	console.log(
-		"Network unavailable. Adding request to retry queue for request uri",
-		config.url,
-	);
-	return new Promise((resolve) => {
-		addRequestToRetryQueue(() => {
-			console.log(
-				"Netwoek available. Retrying request for request uri",
-				config.url,
-			);
-			resolve(config);
-		});
-	});
-}
-
-/**
- * Handle network unavailable
  * @param {AxiosError} error
  * @param {import("T/axios-extends").AxiosRequestConfigExtends} config
  * @param {import("axios").AxiosInstance} requestInstance
@@ -61,7 +37,7 @@ export function handleNetworkUnavailable(config) {
 export function handleNetworkError(error, config, requestInstance) {
 	if (config._skip_no_network_retry) {
 		return Promise.reject(error);
-	} else if (!isNetworkAvailable()) {
+	} else if (!networkAvailable) {
 		console.log(
 			"Network unavailable. Adding request to retry queue for request uri",
 			config.url,
