@@ -22,31 +22,16 @@ const comicApiCall = async (endpoints, params = {}) => {
 };
 
 const comicDetailApiCall = async (endpoints, params = {}) => {
-  const option = {
-    method: "GET",
-    url: endpoints,
-    params: params,
-  };
   try {
-    const response = await axios.request(option);
+    const response = await privateRequest.get(endpoints, {
+      params: params,
+      _optional_jwt_auth: true,
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
     return { error: error.message };
   }
-};
-
-const comicDetailApiCall = async (endpoints, params = {}) => {
-	try {
-		const response = await privateRequest.get(endpoints, {
-			params: params,
-			_optional_jwt_auth: true,
-		});
-		return response.data;
-	} catch (error) {
-		console.error("Error fetching data:", error);
-		return { error: error.message };
-	}
 };
 
 export const fetchTruyenMoi = async () => {
@@ -105,13 +90,4 @@ export const fetchComicDetail = async (comicId) => {
     { page: 0 },
     { size: 24 }
   );
-};
-
-export const fetchComicDetail = async (comicId) => {
-	return await comicDetailApiCall(
-		`${comicEndpoint}/${comicId}`,
-		{ sourceName: "OTRUYEN" },
-		{ page: 0 },
-		{ size: 24 },
-	);
 };

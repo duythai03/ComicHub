@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ComicScreen from "../screens/ComicScreen/ComicScreen";
 import ReadingScreen from "../screens/ReadingScreen/ReadingScreen";
 
-
 const Stack = createNativeStackNavigator();
 
 export default function ComicStack({ route }) {
