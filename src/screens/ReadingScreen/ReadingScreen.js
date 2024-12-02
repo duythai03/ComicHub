@@ -1,10 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
+import { ThemedView } from "@/components/themed/ThemedView";
 
 export default function ReadingScreen() {
   return (
-    <View>
+    <ThemedView>
       <Text>ReadingScreen</Text>
-    </View>
+    </ThemedView>
   );
 }

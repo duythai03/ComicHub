@@ -1,7 +1,8 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ComicScreen from "../screens/ComicScreen/ComicScreen";
-import ReadingScreen from "../screens/ReadingScreen";
+import ReadingScreen from "../screens/ReadingScreen/ReadingScreen";
+
 
 const Stack = createNativeStackNavigator();
 
