@@ -66,9 +66,15 @@ export default function ComicScreen() {
     ? comicDetail.summary.replace(/<p>|<\/p>|&nbsp;/g, "")
     : "Đang cập nhập";
 
-  const renderChapterItem = ({ item }) => (
+  const renderChapterItem = ({ item, index }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("Reading", { comic, chapter: item })}
+      onPress={() =>
+        navigation.navigate("Reading", {
+          comic: comicDetail,
+          chapter: item,
+          index,
+        })
+      }
       className="flex flex-row justify-between items-center mb-4"
     >
       <Image source={{ uri: comic.thumbnailUrl }} className="w-2/12 h-16" />

@@ -4,7 +4,7 @@ const tintColorDark = "#fff";
 export const Colors = {
   light: {
     // Primary and Secondary colors
-    primary: "#3b82f6", // Primary color (main brand color)
+    primary: "#c226f1", // Primary color (main brand color)
     primaryLight: "#93c5fd", // Lighter shade of primary color
     primaryDark: "#1e3a8a", // Darker shade of primary color
     secondary: "#03DAC6", // Secondary color (accent color)
@@ -55,7 +55,7 @@ export const Colors = {
 
   dark: {
     // Primary and Secondary colors
-    primary: "#3b82f6", // Primary color (main brand color)
+    primary: "#c226f1", // Primary color (main brand color)
     primaryLight: "#93c5fd", // Lighter shade of primary color
     primaryDark: "#3700B3", // Darker shade of primary color
     secondary: "#03DAC6", // Secondary color (accent color)
