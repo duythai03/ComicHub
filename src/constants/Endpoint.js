@@ -3,6 +3,7 @@ export const ENDPOINT = {
   // BASE_URL_V1: "https://comic-production.up.railway.app/api",
   BASE_URL: "https://8e33-14-169-94-70.ngrok-free.app/api",
 
+
   REFRESH_TOKEN_V1: "/v1/auth/refresh-token",
 
   // AUTHENTICATION
@@ -20,4 +21,5 @@ export const ENDPOINT = {
     `/v1/comics/${comicId}/follow-status`,
   ADD_FAVORITE_V1: (comicId) => `/v1/comics/followed/${comicId}`,
   REMOVE_FAVORITE_V1: (comicId) => `/v1/comics/followed/${comicId}`,
+
 };

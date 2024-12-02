@@ -1,5 +1,6 @@
 import { ENDPOINT } from "@/constants/Endpoint";
 import axios from "axios";
+import privateRequest from "./request/privateRequest";
 
 // const apiBaseUrl = "https://comic-production.up.railway.app/api/v1";
 const apiBaseUrl = `${ENDPOINT.BASE_URL}/v1`;
@@ -33,6 +34,19 @@ const comicDetailApiCall = async (endpoints, params = {}) => {
     console.error("Error fetching data:", error);
     return { error: error.message };
   }
+};
+
+const comicDetailApiCall = async (endpoints, params = {}) => {
+	try {
+		const response = await privateRequest.get(endpoints, {
+			params: params,
+			_optional_jwt_auth: true,
+		});
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching data:", error);
+		return { error: error.message };
+	}
 };
 
 export const fetchTruyenMoi = async () => {
@@ -91,4 +105,13 @@ export const fetchComicDetail = async (comicId) => {
     { page: 0 },
     { size: 24 }
   );
+};
+
+export const fetchComicDetail = async (comicId) => {
+	return await comicDetailApiCall(
+		`${comicEndpoint}/${comicId}`,
+		{ sourceName: "OTRUYEN" },
+		{ page: 0 },
+		{ size: 24 },
+	);
 };

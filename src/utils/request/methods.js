@@ -4,17 +4,17 @@ import { userAlreadyLoggedIn } from "@/apiServices/authService";
 // key : method name
 // value : position of config object in the arguments
 const axios_methods = {
-	get: 1,
-	post: 2,
-	put: 2,
-	patch: 2,
+	get: 0,
+	post: 1,
+	put: 1,
+	patch: 0,
 	delete: 1,
 	head: 1,
-	options: 1,
-	postForm: 2,
-	putForm: 2,
-	patchForm: 2,
-	request: 1,
+	options: 0,
+	postForm: 1,
+	putForm: 1,
+	patchForm: 1,
+	request: 0,
 };
 
 export function checkLoginBeforeRequest(instance) {
@@ -22,21 +22,26 @@ export function checkLoginBeforeRequest(instance) {
 		const originalMethod = instance[method];
 
 		instance[method] = async function (url, ...args) {
+			const config = args[axios_methods[method]];
+			if (config && config._optional_jwt_auth) {
+				return await originalMethod(url, ...args);
+			}
+
 			const loggedIn = await userAlreadyLoggedIn();
+
 			if (!loggedIn) {
 				console.log(
 					"User not logged in while making request with method: ",
 					method.toUpperCase(),
 				);
-				const config = args[axios_methods[method]];
 
-				if (config && config.navigateToLogin) {
+				if (config && config._navigate_to_login_if_unauthorized) {
 					navigateToLogin();
 				}
 
 				return Promise.reject(NotLoggedInError());
 			}
-			return originalMethod(url, ...args);
+			return await originalMethod(url, ...args);
 		};
 	}
 }
