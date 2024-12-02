@@ -43,7 +43,6 @@ function FavoriteScreen() {
 					/>
 				)) || (
 					<>
-						{/* <ThemedSearchBar className="mb-4" /> */}
 						<FlatList
 							className="h-full"
 							data={favoriteComics}
