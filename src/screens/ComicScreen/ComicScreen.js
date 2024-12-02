@@ -69,7 +69,11 @@ export default function ComicScreen() {
   const renderChapterItem = ({ item, index }) => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("Reading", { comic: comic, chapter: item, index })
+        navigation.navigate("Reading", {
+          comic: comicDetail,
+          chapter: item,
+          index,
+        })
       }
       className="flex flex-row justify-between items-center mb-4"
     >
