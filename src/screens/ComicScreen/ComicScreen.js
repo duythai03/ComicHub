@@ -1,10 +1,17 @@
-import { View, Text, Dimensions, Image, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Dimensions,
+  Image,
+  FlatList,
+  ScrollView,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchComicDetail } from "@/utils/ComicApi";
 import { ThemedView } from "@/components/themed/ThemedView";
 import { ThemedText } from "@/components/themed/ThemedText";
@@ -13,6 +20,8 @@ import LoadingCircle from "@/components/LoadingCircle";
 import { LinearGradient } from "expo-linear-gradient";
 import ComicImage from "./ComicImage";
 import { useFavorite } from "@/contexts/FavoriteContext";
+import { addEventListener } from "@/utils/event";
+import { EventName } from "@/constants/EventName";
 
 export default function ComicScreen() {
   const navigation = useNavigation();
@@ -23,26 +32,20 @@ export default function ComicScreen() {
   const heightImg = height * 0.35;
   const [comicDetail, setComicDetail] = useState(null);
   const [sortUp, setSortUp] = useState(true);
+  const { addFavoriteComic, removeFavoriteComic } = useFavorite();
+  const [isLiked, setIsLiked] = useState(false);
 
   const { isLoading } = useQuery({
     queryKey: ["comicDetail"],
     queryFn: () => fetchComicDetail(comic.id),
     onSuccess: (data) => {
       setComicDetail(data);
+      setIsLiked(data.followed === true);
     },
     onError: (error) => {
       console.log(error);
     },
   });
-
-  const { addFavoriteComic, removeFavoriteComic, isFavorite } = useFavorite();
-  const [isLiked, setIsLiked] = useState(false);
-
-  useEffect(() => {
-    if (comic) {
-      setIsLiked(isFavorite(comic.id)); // Kiểm tra xem truyện có trong danh sách yêu thích không
-    }
-  }, [comic, isFavorite]);
 
   const toggleFavorite = () => {
     if (isLiked) {
@@ -194,7 +197,7 @@ export default function ComicScreen() {
               </TouchableOpacity>
             </View>
             <FlatList
-              data={comicDetail?.chapters.content}
+              data={comicDetail?.chapters?.content || []}
               renderItem={renderChapterItem}
               keyExtractor={(item) => item.id}
               inverted={!sortUp}
