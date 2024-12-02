@@ -1,5 +1,6 @@
 import {
   favoriteComic,
+  getFavoriteComicStatusV1,
   getFavoriteComicsV1,
   unfavoriteComic,
 } from "@/apiServices/favoriteService";
@@ -157,8 +158,9 @@ export function FavoriteProvider({ children }) {
     );
   };
 
-  const isFavorite = (comicId) => {
-    return favoriteComics.some((comic) => comic.id === comicId);
+  const isFavorite = async (comicId) => {
+    const status = await getFavoriteComicStatusV1(comicId);
+    return status === true;
   };
 
   const resetContext = useCallback(() => {
@@ -206,10 +208,6 @@ export function FavoriteProvider({ children }) {
 
         initialFetching,
         nextPageFetching,
-
-        fetchComics,
-        fetchNextPage,
-        atomicFetchNextPage,
 
         removeFavoriteComic,
         addFavoriteComic,

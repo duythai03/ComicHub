@@ -18,7 +18,7 @@ export default function AppNavigation() {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="LoginScreen"
+        initialRouteName="Welcome"
       >
         <Stack.Screen name="HomeTab" component={HomeTab} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />

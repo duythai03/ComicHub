@@ -1,5 +1,6 @@
 import { ENDPOINT } from "@/constants/Endpoint";
 import axios from "axios";
+import privateRequest from "./request/privateRequest";
 
 // const apiBaseUrl = "https://comic-production.up.railway.app/api/v1";
 const apiBaseUrl = `${ENDPOINT.BASE_URL}/v1`;
@@ -21,13 +22,11 @@ const comicApiCall = async (endpoints, params = {}) => {
 };
 
 const comicDetailApiCall = async (endpoints, params = {}) => {
-  const option = {
-    method: "GET",
-    url: endpoints,
-    params: params,
-  };
   try {
-    const response = await axios.request(option);
+    const response = await privateRequest.get(endpoints, {
+      params: params,
+      _optional_jwt_auth: true,
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);

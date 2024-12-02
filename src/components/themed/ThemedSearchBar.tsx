@@ -1,37 +1,34 @@
-import { View } from "react-native";
-import ThemedTextInput, { ThemedTextInputProps } from "./ThemedTextInput";
+import { TextInput, View } from "react-native";
+import { ThemedTextInputProps } from "./ThemedTextInput";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useThemeColor } from "@/theme/useThemeColor";
 
 type ThemedSearchBarProps = ThemedTextInputProps & {
 	iconOnly?: boolean;
+	wrapperStyle?: any;
+	suffixIconName?: string;
 };
 
 function ThemedSearchBar({
 	placeholder = "Search",
+	wrapperStyle,
 	style,
 	iconOnly = true,
+	suffixIconName,
 	...props
 }: ThemedSearchBarProps) {
 	const iconColor = useThemeColor("icon");
 
 	return (
-		<View className="relative flex-row ">
-			<ThemedTextInput
+		<View style={wrapperStyle} className="flex-row items-center">
+			<TextInput
 				{...props}
 				className="py-3 pl-8 rounded-3xl w-full"
 				placeholder={placeholder}
-				style={style}
+				style={[style, { borderWidth: 0 }]}
 			/>
 
-			<View
-				style={{
-					top: "50%",
-					position: "absolute",
-					transform: [{ translateY: -22 }],
-				}}
-				className="absolute right-4"
-			>
+			<View style={{}} className="right-4">
 				<MaterialIcons name="search" size={30} color={iconColor} />
 			</View>
 		</View>
