@@ -34,6 +34,19 @@ const comicDetailApiCall = async (endpoints, params = {}) => {
   }
 };
 
+const chapterApiCall = async (endpoints, params = {}) => {
+  try {
+    const response = await privateRequest.get(endpoints, {
+      params: params,
+      _optional_jwt_auth: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return { error: error.message };
+  }
+};
+
 export const fetchTruyenMoi = async () => {
   return await comicApiCall(comicEndpoint, { page: 0 }, { size: 24 });
 };
@@ -89,5 +102,11 @@ export const fetchComicDetail = async (comicId) => {
     { sourceName: "OTRUYEN" },
     { page: 0 },
     { size: 24 }
+  );
+};
+
+export const fetchChapter = async (comicId, chapterId) => {
+  return await chapterApiCall(
+    `${comicEndpoint}/${comicId}/chapters/${chapterId}`
   );
 };
