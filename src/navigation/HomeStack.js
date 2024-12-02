@@ -9,23 +9,23 @@ import ComicStack from "./ComicStack";
 
 const Stack = createNativeStackNavigator();
 export default function HomeStack() {
-	return (
-		<Stack.Navigator
-			screenOptions={{
-				headerShown: false,
-			}}
-			initialRouteName="HomeTab"
-		>
-			<Stack.Screen name="HomeTab" component={HomeTab} />
-			<Stack.Screen name="Welcome" component={WelcomeScreen} />
-			<Stack.Screen name="LoginScreen" component={LoginScreen} />
-			<Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-			<Stack.Screen
-				name="Search"
-				component={SearchScreen}
-				options={{ headerShown: true }}
-			/>
-			<Stack.Screen name="ComicStack" component={ComicStack} />
-		</Stack.Navigator>
-	);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="Welcome"
+    >
+      <Stack.Screen name="HomeTab" component={HomeTab} />
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+      <Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen name="ComicStack" component={ComicStack} />
+    </Stack.Navigator>
+  );
 }
