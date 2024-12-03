@@ -1,8 +1,19 @@
 import { View, TextInput } from "react-native";
-import React from "react";
+import { useState } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SearchInput() {
+  const navigation = useNavigation();
+  const [searchText, setSearchText] = useState("");
+
+  const handleChangedText = (text) => {
+    setSearchText(text);
+  };
+
+  const handleSearch = () => {
+    navigation.navigate("Search", { searchText });
+  };
   return (
     <View className="relative w-[80%] mb-4">
       <TextInput
@@ -13,6 +24,9 @@ export default function SearchInput() {
           shadowOffset: { width: 0, height: 1 },
           elevation: 2,
         }}
+        onChangeText={handleChangedText}
+        value={searchText}
+        onSubmitEditing={handleSearch}
       />
       <Entypo
         name="magnifying-glass"
@@ -23,7 +37,7 @@ export default function SearchInput() {
           top: "25%",
           transform: [{ translateY: -2 }],
         }}
-        onPress={() => navigation.navigate("Search")}
+        onPress={handleSearch}
       />
     </View>
   );

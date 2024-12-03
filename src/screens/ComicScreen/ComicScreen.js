@@ -118,7 +118,7 @@ export default function ComicScreen() {
 
       {/* Read Fisrt Chapter Button */}
       {isLoading ? (
-        <LoadingCircle />
+        ""
       ) : (
         <ThemedView
           className="absolute bottom-0 left-0 z-10 p-2 flex justify-center items-center w-full h-20"
@@ -190,7 +190,7 @@ export default function ComicScreen() {
           </View>
 
           {/* line */}
-          <View className="border-t-[1px] border-gray-200 m-3" />
+          <View className="border-t-[1px] border-[#D1D5DB] m-3" />
 
           {/* Chapter List */}
           <View className="px-3">

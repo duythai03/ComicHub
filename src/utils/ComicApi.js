@@ -6,6 +6,7 @@ import publicRequest from "./request/publicRequest";
 // const apiBaseUrl = "https://comic-production.up.railway.app/api/v1";
 const apiBaseUrl = `${ENDPOINT.BASE_URL}/v1`;
 const comicEndpoint = `${apiBaseUrl}/comics`;
+const searchEndpoint = `${apiBaseUrl}/comics/searching`;
 
 const comicApiCall = async (endpoints, params = {}) => {
   const option = {
@@ -109,6 +110,15 @@ export const fetchGenreComic = async (categoryId, pageNumber) => {
   return await genreComicApiCall(
     comicEndpoint,
     { filterCategoryIds: categoryId },
+    { page: pageNumber },
+    { size: 24 }
+  );
+};
+
+export const fetchSearchComic = async (searchKey, pageNumber) => {
+  return await genreComicApiCall(
+    searchEndpoint,
+    { q: searchKey },
     { page: pageNumber },
     { size: 24 }
   );

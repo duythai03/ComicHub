@@ -19,13 +19,13 @@ export default function ComicImage({ comic, widthImg, heightImg }) {
       />
       <GradientOverlay>
         <Text className="text-white text-lg font-bold">{comic.name}</Text>
-        <Text className="text-gray-200 text-sm">
-          Tác giả: {comic.authors?.[0] || "Đang cập nhập"}
+        <Text className="text-gray-200 text-sm text-white">
+          Tác giả: {comic.authors?.[0].name || "Đang cập nhập"}
         </Text>
         <View className="flex flex-row space-x-3">
           {comic.categories.slice(0, 4).map((genre, index) => (
             <View key={index} className="my-2">
-              <Text className="text-gray-200 text-sm p-1 border-[1px] border-white rounded-sm text-center">
+              <Text className="text-[#D1D5DB] text-sm p-1 border-[1px] border-[#D1D5DB] rounded-sm text-center">
                 {genre.name}
               </Text>
             </View>
