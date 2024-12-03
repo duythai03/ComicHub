@@ -90,7 +90,16 @@ export default function ComicScreen() {
     <ThemedView className="flex-1 relative">
       {/* Back Button */}
       <TouchableOpacity
-        className="absolute top-8 left-3 z-10 bg-black p-2 rounded-full opacity-50"
+        style={{
+          position: "absolute",
+          top: 32,
+          left: 12,
+          zIndex: 10,
+          backgroundColor: "black",
+          padding: 8,
+          borderRadius: 9999,
+          opacity: 0.5,
+        }}
         onPress={() => navigation.goBack()}
       >
         <AntDesign name="arrowleft" size={24} color="white" />
@@ -98,7 +107,16 @@ export default function ComicScreen() {
 
       {/* Comment Button */}
       <TouchableOpacity
-        className="absolute top-8 right-3 z-10 bg-black p-2 rounded-full opacity-70"
+        style={{
+          position: "absolute",
+          top: 32,
+          right: 12,
+          zIndex: 10,
+          backgroundColor: "black",
+          padding: 8,
+          borderRadius: 9999,
+          opacity: 0.7,
+        }}
         onPress={() => console.log("Comment")}
       >
         <AntDesign name="message1" size={24} color="white" />
@@ -106,7 +124,16 @@ export default function ComicScreen() {
 
       {/* Favourite Button */}
       <TouchableOpacity
-        className="absolute top-8 right-14 z-10 bg-black p-2 rounded-full opacity-70"
+        style={{
+          position: "absolute",
+          top: 32,
+          right: 56,
+          zIndex: 10,
+          backgroundColor: "black",
+          padding: 8,
+          borderRadius: 9999,
+          opacity: 0.7,
+        }}
         onPress={toggleFavorite}
       >
         <AntDesign
@@ -141,7 +168,10 @@ export default function ComicScreen() {
               }
               className="flex justify-center items-center"
             >
-              <ThemedText className="text-white font-bold text-xl">
+              <ThemedText
+                style={{ color: "#fff" }}
+                className="text-white font-bold text-xl"
+              >
                 Đọc tập đầu
               </ThemedText>
             </TouchableOpacity>

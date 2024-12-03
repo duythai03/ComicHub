@@ -33,13 +33,19 @@ export default function ComicList2({ data, totalPage }) {
                 end={{ x: 1, y: 0 }}
                 className="h-6 rounded-lg flex justify-center items-center w-20"
               >
-                <Text className="text-white font-bold text-sm">On Going</Text>
+                <Text
+                  style={{ color: "white" }}
+                  className="text-white font-bold text-sm"
+                >
+                  On Going
+                </Text>
               </LinearGradient>
               <View className="flex-row">
                 {item.categories.slice(0, 3).map((category, index) => (
                   <ThemedText
                     key={index}
-                    className="text-sm border-[1px] border-gray-300 rounded-full px-2 py-1 mr-2"
+                    className="text-sm border-[1px] rounded-full px-2 py-1 mr-2"
+                    style={{ borderColor: "#D1D5DB" }}
                   >
                     {category.name}
                   </ThemedText>

@@ -23,6 +23,7 @@ export default function SearchInput() {
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 1 },
           elevation: 2,
+          backgroundColor: "#f5f5f5",
         }}
         onChangeText={handleChangedText}
         value={searchText}

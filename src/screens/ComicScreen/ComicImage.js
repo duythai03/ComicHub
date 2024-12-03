@@ -18,8 +18,16 @@ export default function ComicImage({ comic, widthImg, heightImg }) {
         className="w-full h-full"
       />
       <GradientOverlay>
-        <Text className="text-white text-lg font-bold">{comic.name}</Text>
-        <Text className="text-gray-200 text-sm text-white">
+        <Text
+          style={{ color: "#fff" }}
+          className="text-white text-lg font-bold"
+        >
+          {comic.name}
+        </Text>
+        <Text
+          style={{ color: "#e5e7eb" }}
+          className="text-gray-200 text-sm text-white"
+        >
           Tác giả: {comic.authors?.[0].name || "Đang cập nhập"}
         </Text>
         <View className="flex flex-row space-x-3">

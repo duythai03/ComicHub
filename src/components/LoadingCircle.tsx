@@ -2,22 +2,22 @@ import { View, ActivityIndicator, ActivityIndicatorProps } from "react-native";
 import React from "react";
 
 export type LoadingCircleProps = ActivityIndicatorProps & {
-	loading: boolean;
+  loading: boolean;
 };
 
 export default function LoadingCircle({
-	loading,
-	style,
-	...props
+  loading,
+  style,
+  ...props
 }: LoadingCircleProps) {
-	return (
-		<View>
-			<ActivityIndicator
-				size="large"
-				color="#0000ff"
-				style={style}
-				{...props}
-			/>
-		</View>
-	);
+  return (
+    <View>
+      <ActivityIndicator
+        size="large"
+        color="#c226f1"
+        style={style}
+        {...props}
+      />
+    </View>
+  );
 }
