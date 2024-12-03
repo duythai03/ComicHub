@@ -117,33 +117,37 @@ export default function ComicScreen() {
       </TouchableOpacity>
 
       {/* Read Fisrt Chapter Button */}
-      <ThemedView
-        className="absolute bottom-0 left-0 z-10 p-2 flex justify-center items-center w-full h-20"
-        style={{
-          elevation: 5,
-        }}
-      >
-        <LinearGradient
-          colors={["#c226f1", "#9e30ec"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          className="h-12 rounded-xl flex justify-center items-center w-10/12"
+      {isLoading ? (
+        ""
+      ) : (
+        <ThemedView
+          className="absolute bottom-0 left-0 z-10 p-2 flex justify-center items-center w-full h-20"
+          style={{
+            elevation: 5,
+          }}
         >
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Reading", {
-                comic,
-                chapter: comicDetail?.chapters.content[0],
-              })
-            }
-            className="flex justify-center items-center"
+          <LinearGradient
+            colors={["#c226f1", "#9e30ec"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            className="h-12 rounded-xl flex justify-center items-center w-10/12"
           >
-            <ThemedText className="text-white font-bold text-xl">
-              Đọc tập đầu
-            </ThemedText>
-          </TouchableOpacity>
-        </LinearGradient>
-      </ThemedView>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Reading", {
+                  comic,
+                  chapter: comicDetail?.chapters.content[0],
+                })
+              }
+              className="flex justify-center items-center"
+            >
+              <ThemedText className="text-white font-bold text-xl">
+                Đọc tập đầu
+              </ThemedText>
+            </TouchableOpacity>
+          </LinearGradient>
+        </ThemedView>
+      )}
 
       {/* Comic Image */}
       <ComicImage comic={comic} widthImg={widthImg} heightImg={heightImg} />
@@ -186,7 +190,7 @@ export default function ComicScreen() {
           </View>
 
           {/* line */}
-          <View className="border-t-[1px] border-gray-200 m-3" />
+          <View className="border-t-[1px] border-[#D1D5DB] m-3" />
 
           {/* Chapter List */}
           <View className="px-3">
