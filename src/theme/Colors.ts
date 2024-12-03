@@ -63,7 +63,7 @@ export const Colors = {
     secondaryDark: "#018786", // Darker shade of secondary color
 
     // Background and Surface
-    background: "#121212", // Main background color of the app (dark theme)
+    background: "#232531", // Main background color of the app (dark theme)
     surface: "#2A2D30", // Background color for surfaces like cards, tables
     elevatedSurface: "#121212", // Surface color for elevated components (e.g., dialogs)
 

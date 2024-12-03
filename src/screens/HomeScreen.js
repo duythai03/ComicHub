@@ -3,28 +3,27 @@ import { useEffect, useState } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
 import Slider from "../components/Slider";
 import { useQuery } from "@tanstack/react-query";
-import {
-  fetchTruyenMoi,
-  fetchTruyenMau,
-  fetchRomance,
-  fetchManga,
-  fetchChuyenSinh,
-  fetchAction,
-} from "../utils/ComicApi";
+import { fetchTruyenMoi, fetchGenreComic } from "../utils/ComicApi";
 import ThemeButton from "../components/ThemeButton";
 import { lightTheme, darkTheme } from "../utils/Theme";
 import { useTheme } from "../utils/Context";
 import LoadingCircle from "../components/LoadingCircle";
 import { useNavigation } from "@react-navigation/native";
 import ComicList from "@/components/ComicList";
+import SearchInput from "@/components/SearchInput";
 
 export default function HomeScreen() {
   const [truyenMoi, setTruyenMoi] = useState([]);
   const [truyenMau, setTruyenMau] = useState([]);
+  const [truyenMauTotalPage, setTruyenMauTotalPage] = useState(0);
   const [romance, setRomance] = useState([]);
+  const [romanceTotalPage, setRomanceTotalPage] = useState(0);
   const [manga, setManga] = useState([]);
+  const [mangaTotalPage, setMangaTotalPage] = useState(0);
   const [chuyenSinh, setChuyenSinh] = useState([]);
+  const [chuyenSinhTotalPage, setChuyenSinhTotalPage] = useState(0);
   const [Action, setAction] = useState([]);
+  const [ActionTotalPage, setActionTotalPage] = useState(0);
   const { isDarkMode } = useTheme();
   const theme = isDarkMode ? darkTheme : lightTheme;
 
@@ -43,9 +42,10 @@ export default function HomeScreen() {
 
   const { isLoading: isTruyenMauLoading } = useQuery({
     queryKey: ["truyenMau"],
-    queryFn: fetchTruyenMau,
+    queryFn: () => fetchGenreComic("6724cc2718ed6853571a86a6", 0),
     onSuccess: (data) => {
       setTruyenMau(data);
+      setTruyenMauTotalPage(data.totalPages);
     },
     onError: (error) => {
       console.log(error);
@@ -54,9 +54,10 @@ export default function HomeScreen() {
 
   const { isLoading: isRomanceLoading } = useQuery({
     queryKey: ["romance"],
-    queryFn: fetchRomance,
+    queryFn: () => fetchGenreComic("6724cc2718ed6853571a8693", 0),
     onSuccess: (data) => {
       setRomance(data);
+      setRomanceTotalPage(data.totalPages);
     },
     onError: (error) => {
       console.log(error);
@@ -65,25 +66,37 @@ export default function HomeScreen() {
 
   const { isLoading: isMangaLoading } = useQuery({
     queryKey: ["manga"],
-    queryFn: fetchManga,
+    queryFn: () => fetchGenreComic("6724cc2718ed6853571a8689", 0),
     onSuccess: (data) => {
       setManga(data);
+      setMangaTotalPage(data.totalPages);
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
   const { isLoading: isChuyenSinhLoading } = useQuery({
     queryKey: ["chuyenSinh"],
-    queryFn: fetchChuyenSinh,
+    queryFn: () => fetchGenreComic("6724cc2718ed6853571a8679", 0),
     onSuccess: (data) => {
       setChuyenSinh(data);
+      setChuyenSinhTotalPage(data.totalPages);
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
   const { isLoading: isActionLoading } = useQuery({
     queryKey: ["Action"],
-    queryFn: fetchAction,
+    queryFn: () => fetchGenreComic("6724cc2718ed6853571a8676", 0),
     onSuccess: (data) => {
       setAction(data);
+      setActionTotalPage(data.totalPages);
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
@@ -99,28 +112,7 @@ export default function HomeScreen() {
     <View className="flex-1" style={theme.container}>
       <ScrollView className="mx-2" showsVerticalScrollIndicator={false}>
         <View className="flex-row justify-between items-center">
-          <View className="relative w-[80%] mb-4">
-            <TextInput
-              placeholder="Tìm kiếm truyện..."
-              className="w-full rounded-3xl p-2 pl-10 bg-white"
-              style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                elevation: 2,
-              }}
-            />
-            <Entypo
-              name="magnifying-glass"
-              size={24}
-              style={{
-                position: "absolute",
-                left: 10,
-                top: "50%",
-                transform: [{ translateY: -17 }],
-              }}
-              onPress={() => navigation.navigate("Search")}
-            />
-          </View>
+          <SearchInput />
           <View className="-translate-y-2">
             <ThemeButton />
           </View>
@@ -130,11 +122,31 @@ export default function HomeScreen() {
         ) : (
           <>
             <Slider data={truyenMoi} />
-            <ComicList title="Truyện màu" data={truyenMau} />
-            <ComicList title="Lãng mạn" data={romance} />
-            <ComicList title="Manga" data={manga} />
-            <ComicList title="Chuyển sinh" data={chuyenSinh} />
-            <ComicList title="Hành động" data={Action} />
+            <ComicList
+              title="Truyện màu"
+              data={truyenMau}
+              id="6724cc2718ed6853571a86a6"
+            />
+            <ComicList
+              title="Lãng mạn"
+              data={romance}
+              id="6724cc2718ed6853571a8693"
+            />
+            <ComicList
+              title="Manga"
+              data={manga}
+              id="6724cc2718ed6853571a8689"
+            />
+            <ComicList
+              title="Chuyển sinh"
+              data={chuyenSinh}
+              id="6724cc2718ed6853571a8679"
+            />
+            <ComicList
+              title="Hành động"
+              data={Action}
+              id="6724cc2718ed6853571a8676"
+            />
           </>
         )}
       </ScrollView>

@@ -5,7 +5,7 @@ import { useTheme } from "../utils/Context";
 import { lightTheme, darkTheme } from "../utils/Theme";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ComicList({ title, data }) {
+export default function ComicList({ title, data, id }) {
   const { isDarkMode } = useTheme();
   const theme = isDarkMode ? darkTheme : lightTheme;
   const navigation = useNavigation();
@@ -47,10 +47,20 @@ export default function ComicList({ title, data }) {
         <Text className="font-semibold text-lg" style={theme.text}>
           {title}
         </Text>
-        <AntDesign name="arrowright" size={24} color="#c226f1" />
+        <AntDesign
+          name="arrowright"
+          size={24}
+          color="#c226f1"
+          onPress={() =>
+            navigation.navigate("Genre", {
+              categoryId: id,
+              categoryName: title,
+            })
+          }
+        />
       </View>
       <FlatList
-        data={data}
+        data={data.content}
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={renderItem}
