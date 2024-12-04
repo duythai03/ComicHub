@@ -28,6 +28,7 @@ export const ThemeProvider = ({ children }) => {
 				isDarkMode,
 				toggleDarkTheme,
 				colors: Colors[theme],
+				allColors: Colors,
 			}}
 		>
 			<ThemeProviderDefault value={(isDarkMode && DarkTheme) || DefaultTheme}>
@@ -42,7 +43,8 @@ export function useThemeContext() {
 	if (!context) {
 		throw new Error("useThemeContext must be used within a ThemeProvider");
 	}
-	const { theme, setTheme, isDarkMode, toggleDarkTheme, colors } = context;
+	const { theme, setTheme, isDarkMode, toggleDarkTheme, colors, allColors } =
+		context;
 
 	return {
 		theme,
@@ -50,5 +52,6 @@ export function useThemeContext() {
 		isDarkMode,
 		toggleDarkTheme,
 		colors,
+		allColors,
 	};
 }

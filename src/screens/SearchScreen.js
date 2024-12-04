@@ -4,15 +4,15 @@ import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSearchComic } from "@/utils/ComicApi";
 import LoadingCircle from "@/components/LoadingCircle";
-import { ThemedView } from "@/components/themed/ThemedView";
+import ThemedView from "@/components/themed/ThemedView";
 import ComicList2 from "@/components/ComicList2";
 import { ThemedText } from "@/components/themed/ThemedText";
 
 export default function SearchScreen() {
-  const searchText = useRoute().params.searchText;
-  const [comics, setComics] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPage, setTotalPage] = useState(0);
+	const searchText = useRoute().params.searchText;
+	const [comics, setComics] = useState([]);
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalPage, setTotalPage] = useState(0);
 
   const { isLoading: isComicsLoading } = useQuery({
     queryKey: ["search", searchText, currentPage],
@@ -42,4 +42,5 @@ export default function SearchScreen() {
       )}
     </ThemedView>
   );
+
 }

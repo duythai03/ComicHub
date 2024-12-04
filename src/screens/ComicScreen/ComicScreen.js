@@ -1,20 +1,13 @@
-import {
-  View,
-  Text,
-  Dimensions,
-  Image,
-  FlatList,
-  ScrollView,
-} from "react-native";
-import React, { useState, useEffect } from "react";
+import { View, Text, Dimensions, Image, FlatList } from "react-native";
+import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchComicDetail } from "@/utils/ComicApi";
-import { ThemedView } from "@/components/themed/ThemedView";
-import { ThemedText } from "@/components/themed/ThemedText";
+import ThemedView from "@/components/themed/ThemedView";
+import ThemedText from "@/components/themed/ThemedText";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import LoadingCircle from "@/components/LoadingCircle";
 import { LinearGradient } from "expo-linear-gradient";
