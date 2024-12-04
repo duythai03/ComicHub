@@ -39,6 +39,10 @@ export function UserProvider({ children }) {
 			(successCode) => {
 				if (successCode === HttpStatusCode.NoContent) {
 					navigation.navigate("HomeTab", { screen: "Home" });
+					Toast.show({
+						type: "success",
+						text1: "Logout successfully",
+					});
 				}
 			},
 		);
