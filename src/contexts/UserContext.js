@@ -50,13 +50,19 @@ export function UserProvider({ children }) {
 			const accessToken = await getAccessToken();
 			console.log("UserProvider -> accessToken: " + accessToken);
 
-			const user = await getUserProfile((code) => {
+			const user = await getUserProfile((code, error) => {
 				switch (code) {
 					case HttpStatusCode.Unauthorized:
 						break;
 					case HttpStatusCode.Forbidden:
 						break;
 					default:
+						console.log(
+							"UserProvider -> getUserProfile -> code: " +
+								code +
+								" error: " +
+								error,
+						);
 				}
 			});
 			if (user) {

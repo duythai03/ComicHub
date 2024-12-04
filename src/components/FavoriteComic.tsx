@@ -2,8 +2,8 @@ import { DimensionValue, Image, TouchableOpacity, View } from "react-native";
 import { SimpleComicProps } from "./SimpleComic";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import ThemedMaterialsIcon from "./themed/ThemedMaterialsIcon";
-import { ThemedView } from "./themed/ThemedView";
-import { ThemedText } from "./themed/ThemedText";
+import ThemedView from "./themed/ThemedView";
+import ThemedText from "./themed/ThemedText";
 import ConfirmModal, { ConfirmModalProps } from "./modal/ConfirmModal";
 import { useState } from "react";
 

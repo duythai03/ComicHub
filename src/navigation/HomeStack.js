@@ -8,46 +8,55 @@ import HomeTab from "./HomeTab";
 import ComicStack from "./ComicStack";
 import GenreScreen from "@/screens/GenreScreen";
 import { useTheme } from "../utils/Context";
+import TermsScreen from "@/screens/TermsScreen";
+import PrivacyPolicyScreen from "@/screens/PrivacyPolicyScreen";
+import AboutUsScreen from "@/screens/AboutUsScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function HomeStack() {
-  const { isDarkMode } = useTheme();
-  const headerBackgroundColor = isDarkMode ? "#232531" : "#fff";
+	const { isDarkMode } = useTheme();
+	const headerBackgroundColor = isDarkMode ? "#232531" : "#fff";
 
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName="Welcome"
-    >
-      <Stack.Screen name="HomeTab" component={HomeTab} />
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-      <Stack.Screen
-        name="Search"
-        component={SearchScreen}
-        options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: headerBackgroundColor,
-          },
-        }}
-      />
-      <Stack.Screen
-        name="Genre"
-        component={GenreScreen}
-        options={({ route }) => ({
-          title: route.params?.categoryName,
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: headerBackgroundColor,
-          },
-        })}
-      />
-      <Stack.Screen name="ComicStack" component={ComicStack} />
-    </Stack.Navigator>
-  );
+	return (
+		<Stack.Navigator
+			screenOptions={{
+				headerShown: false,
+			}}
+			initialRouteName="Welcome"
+		>
+			<Stack.Screen name="HomeTab" component={HomeTab} />
+			<Stack.Screen name="Welcome" component={WelcomeScreen} />
+			<Stack.Screen name="LoginScreen" component={LoginScreen} />
+			<Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+			<Stack.Screen
+				name="Search"
+				component={SearchScreen}
+				options={{
+					headerShown: true,
+					headerStyle: {
+						backgroundColor: headerBackgroundColor,
+					},
+				}}
+			/>
+			<Stack.Screen
+				name="Genre"
+				component={GenreScreen}
+				options={({ route }) => ({
+					title: route.params?.categoryName,
+					headerShown: true,
+					headerStyle: {
+						backgroundColor: headerBackgroundColor,
+					},
+				})}
+			/>
+			<Stack.Screen name="ComicStack" component={ComicStack} />
+			<Stack.Screen name="TermsScreen" component={TermsScreen} />
+			<Stack.Screen
+				name="PrivacyPolicyScreen"
+				component={PrivacyPolicyScreen}
+			/>
+			<Stack.Screen name="AboutUsScreen" component={AboutUsScreen} />
+		</Stack.Navigator>
+	);
 }

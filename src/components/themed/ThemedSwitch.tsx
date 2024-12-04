@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, StyleSheet, SwitchProps } from "react-native";
-import { ThemedView } from "./ThemedView";
-import { ThemedText } from "./ThemedText";
+import ThemedView from "./ThemedView";
+import ThemedText from "./ThemedText";
 
 export type ThemedSwitchProps = SwitchProps & {
 	title?: string;

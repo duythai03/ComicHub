@@ -1,14 +1,21 @@
 import { useTheme } from "../utils/Context";
-import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
-import day from "../../assets/image/day.png";
-import night from "../../assets/image/night.png";
-import { ThemedText } from "./themed/ThemedText";
+import { Image, TouchableWithoutFeedback, View } from "react-native";
+import ThemedText from "./themed/ThemedText";
+
+const day = require("../../assets/image/day.png");
+const night = require("../../assets/image/night.png");
 
 export type ThemeButtonProps = {
-	title?: string;
+	lightTitle?: string;
+	darkTitle?: string;
+	title?: boolean;
 };
 
-export default function ThemeButton({ title }: ThemeButtonProps) {
+export default function ThemeButton({
+	lightTitle,
+	darkTitle,
+	title,
+}: ThemeButtonProps) {
 	const { isDarkMode, toggleTheme } = useTheme();
 
 	if (title) {
@@ -21,7 +28,7 @@ export default function ThemeButton({ title }: ThemeButtonProps) {
 					/>
 				</TouchableWithoutFeedback>
 				<ThemedText className="text-lg ml-4">
-					{isDarkMode ? "Chế độ tối" : "Chế độ sáng"}
+					{isDarkMode ? darkTitle || "Chế độ tối" : lightTitle || "Chế độ sáng"}
 				</ThemedText>
 			</View>
 		);

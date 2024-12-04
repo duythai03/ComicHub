@@ -1,8 +1,15 @@
 import { useThemeColor } from "@/theme/useThemeColor";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Text, type TextProps, StyleSheet } from "react-native";
-import { ThemedView } from "./ThemedView";
-import { MaterialIconsName } from "T/material-icons-types";
+import {
+	Text,
+	type TextProps,
+	StyleSheet,
+	TextStyle,
+	OpaqueColorValue,
+} from "react-native";
+import ThemedView from "./ThemedView";
+import { MaterialIconsName, MaterialIconsStyle } from "T/material-icons-types";
+import { Style } from "nativewind/dist/style-sheet/runtime";
 
 export type ThemedTextProps = TextProps & {
 	subtitle?: boolean;
@@ -11,12 +18,23 @@ export type ThemedTextProps = TextProps & {
 	darkColor?: string;
 	type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
 	iconPrefixName?: MaterialIconsName;
+	iconPrefixStyle?: MaterialIconsStyle;
+	iconPrefixColor?: string | OpaqueColorValue;
+
 	iconSuffixName?: MaterialIconsName;
+	iconSuffixStyle?: MaterialIconsStyle;
+	iconSuffixColor?: string | OpaqueColorValue;
 };
 
 export function ThemedText({
 	iconPrefixName,
+	iconPrefixColor,
+	iconPrefixStyle,
+
 	iconSuffixName,
+	iconSuffixStyle,
+	iconSuffixColor,
+
 	style,
 	subtitle,
 	primary,
@@ -33,38 +51,54 @@ export function ThemedText({
 		},
 	);
 
-	return iconPrefixName || iconSuffixName ? (
-		<ThemedView className="flex-row items-center">
-			{iconPrefixName && (
-				<MaterialIcons
-					name={iconPrefixName}
-					size={24}
-					color={color}
-					className="mr-2"
-				/>
-			)}
-			<Text
-				{...rest}
-				style={[
-					type === "default" ? styles.default : undefined,
-					type === "title" ? styles.title : undefined,
-					type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
-					type === "subtitle" ? styles.subtitle : undefined,
-					type === "link" ? styles.link : undefined,
-					{ color },
-					style,
-				]}
-			/>
-			{iconSuffixName && (
-				<MaterialIcons
-					name={iconSuffixName}
-					size={24}
-					color={color}
-					className="ml-2"
-				/>
-			)}
-		</ThemedView>
-	) : (
+	if (iconPrefixName || iconSuffixName) {
+		let mergeStyle =
+			(Object.assign(
+				{},
+				type === "default"
+					? styles.default
+					: type === "title"
+						? styles.title
+						: type === "defaultSemiBold"
+							? styles.defaultSemiBold
+							: type === "subtitle"
+								? styles.subtitle
+								: type === "link"
+									? styles.link
+									: {},
+				...(Array.isArray(style) ? style.filter(Boolean) : []),
+			) as TextStyle) || {};
+		const sharedIconStyle: Style = {
+			lineHeight: mergeStyle.lineHeight,
+			marginBottom: mergeStyle.marginBottom,
+			marginTop: mergeStyle.marginTop,
+		};
+		return (
+			<ThemedView className="flex-row items-center">
+				{iconPrefixName && (
+					<MaterialIcons
+						name={iconPrefixName}
+						size={24}
+						color={iconPrefixColor || color}
+						className="mr-2"
+						style={[sharedIconStyle, iconPrefixStyle]}
+					/>
+				)}
+				<Text {...rest} style={[{ color }, mergeStyle]} />
+				{iconSuffixName && (
+					<MaterialIcons
+						style={[sharedIconStyle, iconSuffixStyle]}
+						name={iconSuffixName}
+						size={24}
+						color={iconSuffixColor || color}
+						className="ml-2"
+					/>
+				)}
+			</ThemedView>
+		);
+	}
+
+	return (
 		<Text
 			{...rest}
 			style={[
@@ -105,3 +139,5 @@ const styles = StyleSheet.create({
 		color: "#0a7ea4",
 	},
 });
+
+export default ThemedText;

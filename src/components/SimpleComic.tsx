@@ -1,5 +1,5 @@
-import { ThemedText } from "@/components/themed/ThemedText";
-import { ThemedView } from "@/components/themed/ThemedView";
+import ThemedText from "@/components/themed/ThemedText";
+import ThemedView from "@/components/themed/ThemedView";
 import React from "react";
 import { Image, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";

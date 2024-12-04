@@ -2,7 +2,7 @@ import {
 	TouchableOpacity,
 	TouchableOpacityProps,
 } from "react-native-gesture-handler";
-import { ThemedText, ThemedTextProps } from "./ThemedText";
+import ThemedText, { ThemedTextProps } from "./ThemedText";
 
 export type ThemedTouchableTextProps = ThemedTextProps & {
 	touchableStyle?: TouchableOpacityProps["style"];
@@ -17,7 +17,11 @@ export default function ThemedTouchableText({
 	...props
 }: ThemedTouchableTextProps) {
 	return (
-		<TouchableOpacity style={touchableStyle} {...touchableProps}>
+		<TouchableOpacity
+			className="flex-row items-center"
+			style={[touchableStyle]}
+			{...touchableProps}
+		>
 			<ThemedText {...props} style={style}>
 				{children}
 			</ThemedText>

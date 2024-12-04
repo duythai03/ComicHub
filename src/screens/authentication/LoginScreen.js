@@ -1,12 +1,11 @@
-import { ThemedText } from "@/components/themed/ThemedText";
-import { ThemedView } from "@/components/themed/ThemedView";
+import ThemedText from "@/components/themed/ThemedText";
+import ThemedView from "@/components/themed/ThemedView";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { ThemedValidTextInput } from "@/components/themed";
 import { MinLength, Required, useValidation } from "@/hooks/validation";
 import { validateAll } from "@/hooks/validation/useValidation";
 import { login } from "@/apiServices/authService";
-import { useUserContext } from "@/contexts/UserContext";
 import { useState } from "react";
 import ThemedLoadingCircle from "@/components/themed/ThemedLoadingCircle";
 import { HttpStatusCode } from "axios";

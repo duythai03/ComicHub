@@ -10,3 +10,4 @@ export { default as ThemedSaveAreaView } from "./ThemedSaveAreaView";
 export { default as ThemedLoadingCircle } from "./ThemedLoadingCircle";
 export { default as ThemedSearchBar } from "./ThemedSearchBar";
 export { default as ThemedMaterialsIcon } from "./ThemedMaterialsIcon";
+export { default as ThemedProgressBar } from "./ThemedProgressBar";

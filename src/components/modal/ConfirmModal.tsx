@@ -2,7 +2,7 @@ import { useThemeColor } from "@/theme/useThemeColor";
 import React, { useState } from "react";
 
 import { Modal, View, StyleSheet, ModalProps } from "react-native";
-import { ThemedText } from "../themed/ThemedText";
+import ThemedText from "../themed/ThemedText";
 import ThemedTouchableText from "../themed/ThemedTouchableText";
 import LoadingCircle from "../LoadingCircle";
 
