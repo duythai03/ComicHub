@@ -1,6 +1,5 @@
 import { View, TextInput, Image, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
-import userImg from "../../../assets/userImg.jpg";
 import { ThemedText } from "@/components/themed/ThemedText";
 import { postComment } from "@/utils/CommentApi";
 import { useMutation } from "@tanstack/react-query";
@@ -33,7 +32,12 @@ export default function PostComment({ comicId, chapterId, onPostSuccess }) {
 
   return (
     <View className="flex-row mb-4 items-center">
-      <Image source={userImg} className="w-14 h-14 rounded-full mr-2" />
+      <Image
+        source={{
+          uri: "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+        }}
+        className="w-14 h-14 rounded-full mr-2"
+      />
       <View className="flex-1 ml-2">
         <ThemedText className="font-bold ml-2 mb-1">{user?.name}</ThemedText>
         <TextInput
