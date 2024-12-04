@@ -25,15 +25,15 @@ export default function GenreScreen() {
 		},
 	});
 
-	return (
-		<>
-			{iscomicsLoading ? (
-				<LoadingCircle />
-			) : (
-				<ThemedView className="px-3">
-					<ComicList2 data={comics} totalPage={totalPage} />
-				</ThemedView>
-			)}
-		</>
-	);
+  return (
+    <>
+      {iscomicsLoading ? (
+        <LoadingCircle />
+      ) : (
+        <ThemedView className="px-3 flex-1">
+          <ComicList2 data={comics} totalPage={totalPage} />
+        </ThemedView>
+      )}
+    </>
+  );
 }

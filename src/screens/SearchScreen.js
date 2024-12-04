@@ -6,6 +6,7 @@ import { fetchSearchComic } from "@/utils/ComicApi";
 import LoadingCircle from "@/components/LoadingCircle";
 import ThemedView from "@/components/themed/ThemedView";
 import ComicList2 from "@/components/ComicList2";
+import { ThemedText } from "@/components/themed/ThemedText";
 
 export default function SearchScreen() {
 	const searchText = useRoute().params.searchText;
@@ -13,26 +14,33 @@ export default function SearchScreen() {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPage, setTotalPage] = useState(0);
 
-	const { isLoading: isComicsLoading } = useQuery({
-		queryKey: ["search", searchText, currentPage],
-		queryFn: () => fetchSearchComic(searchText, currentPage),
-		onSuccess: (data) => {
-			setComics(data.content);
-			setTotalPage(data.totalPages);
-		},
-		onError: (error) => {
-			console.log(error);
-		},
-	});
-	return (
-		<ThemedView className="flex-1">
-			{isComicsLoading ? (
-				<LoadingCircle />
-			) : (
-				<ThemedView className="px-3">
-					<ComicList2 data={comics} totalPage={totalPage} />
-				</ThemedView>
-			)}
-		</ThemedView>
-	);
+  const { isLoading: isComicsLoading } = useQuery({
+    queryKey: ["search", searchText, currentPage],
+    queryFn: () => fetchSearchComic(searchText, currentPage),
+    onSuccess: (data) => {
+      setComics(data.content);
+      setTotalPage(data.totalPages);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+  return (
+    <ThemedView className="flex-1">
+      {isComicsLoading ? (
+        <LoadingCircle />
+      ) : (
+        <ThemedView className="px-3">
+          {comics.length > 0 ? (
+            <ComicList2 data={comics} totalPage={totalPage} />
+          ) : (
+            <ThemedText className="text-center mt-8">
+              Không tìm thấy kết quả
+            </ThemedText>
+          )}
+        </ThemedView>
+      )}
+    </ThemedView>
+  );
+
 }
