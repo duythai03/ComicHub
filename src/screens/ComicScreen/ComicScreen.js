@@ -20,8 +20,7 @@ import LoadingCircle from "@/components/LoadingCircle";
 import { LinearGradient } from "expo-linear-gradient";
 import ComicImage from "./ComicImage";
 import { useFavorite } from "@/contexts/FavoriteContext";
-import { addEventListener } from "@/utils/event";
-import { EventName } from "@/constants/EventName";
+import Comment from "./Comment";
 
 export default function ComicScreen() {
   const navigation = useNavigation();
@@ -34,6 +33,7 @@ export default function ComicScreen() {
   const [sortUp, setSortUp] = useState(true);
   const { addFavoriteComic, removeFavoriteComic } = useFavorite();
   const [isLiked, setIsLiked] = useState(false);
+  const [commentModalVisible, setCommentModalVisible] = useState(false);
 
   const { isLoading } = useQuery({
     queryKey: ["comicDetail"],
@@ -117,7 +117,7 @@ export default function ComicScreen() {
           borderRadius: 9999,
           opacity: 0.7,
         }}
-        onPress={() => console.log("Comment")}
+        onPress={() => setCommentModalVisible(true)}
       >
         <AntDesign name="message1" size={24} color="white" />
       </TouchableOpacity>
@@ -144,9 +144,7 @@ export default function ComicScreen() {
       </TouchableOpacity>
 
       {/* Read Fisrt Chapter Button */}
-      {isLoading ? (
-        ""
-      ) : (
+      {!isLoading && !commentModalVisible && (
         <ThemedView
           className="absolute bottom-0 left-0 z-10 p-2 flex justify-center items-center w-full h-20"
           style={{
@@ -246,6 +244,13 @@ export default function ComicScreen() {
           </View>
         </>
       )}
+
+      {/* Comment Modal */}
+      <Comment
+        comicId={comic.id}
+        visible={commentModalVisible}
+        onClose={() => setCommentModalVisible(!commentModalVisible)}
+      />
     </ThemedView>
   );
 }
