@@ -6,6 +6,7 @@ import { fetchSearchComic } from "@/utils/ComicApi";
 import LoadingCircle from "@/components/LoadingCircle";
 import { ThemedView } from "@/components/themed/ThemedView";
 import ComicList2 from "@/components/ComicList2";
+import { ThemedText } from "@/components/themed/ThemedText";
 
 export default function SearchScreen() {
   const searchText = useRoute().params.searchText;
@@ -30,7 +31,13 @@ export default function SearchScreen() {
         <LoadingCircle />
       ) : (
         <ThemedView className="px-3">
-          <ComicList2 data={comics} totalPage={totalPage} />
+          {comics.length > 0 ? (
+            <ComicList2 data={comics} totalPage={totalPage} />
+          ) : (
+            <ThemedText className="text-center mt-8">
+              Không tìm thấy kết quả
+            </ThemedText>
+          )}
         </ThemedView>
       )}
     </ThemedView>

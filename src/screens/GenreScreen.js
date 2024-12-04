@@ -30,7 +30,7 @@ export default function GenreScreen() {
       {iscomicsLoading ? (
         <LoadingCircle />
       ) : (
-        <ThemedView className="px-3">
+        <ThemedView className="px-3 flex-1">
           <ComicList2 data={comics} totalPage={totalPage} />
         </ThemedView>
       )}

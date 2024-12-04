@@ -21,6 +21,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import ComicImage from "./ComicImage";
 import { useFavorite } from "@/contexts/FavoriteContext";
 import Comment from "./Comment";
+import { useUserContext } from "@/contexts/UserContext";
 
 export default function ComicScreen() {
   const navigation = useNavigation();
@@ -34,6 +35,7 @@ export default function ComicScreen() {
   const { addFavoriteComic, removeFavoriteComic } = useFavorite();
   const [isLiked, setIsLiked] = useState(false);
   const [commentModalVisible, setCommentModalVisible] = useState(false);
+  const { user } = useUserContext();
 
   const { isLoading } = useQuery({
     queryKey: ["comicDetail"],
@@ -86,6 +88,14 @@ export default function ComicScreen() {
     </TouchableOpacity>
   );
 
+  const handleComment = () => {
+    if (!user) {
+      navigation.navigate("LoginScreen");
+      return;
+    }
+    setCommentModalVisible(true);
+  };
+
   return (
     <ThemedView className="flex-1 relative">
       {/* Back Button */}
@@ -117,7 +127,7 @@ export default function ComicScreen() {
           borderRadius: 9999,
           opacity: 0.7,
         }}
-        onPress={() => setCommentModalVisible(true)}
+        onPress={handleComment}
       >
         <AntDesign name="message1" size={24} color="white" />
       </TouchableOpacity>
@@ -248,6 +258,7 @@ export default function ComicScreen() {
       {/* Comment Modal */}
       <Comment
         comicId={comic.id}
+        chapterId={comicDetail?.chapters?.content[0]?.id}
         visible={commentModalVisible}
         onClose={() => setCommentModalVisible(!commentModalVisible)}
       />
