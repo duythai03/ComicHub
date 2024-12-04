@@ -31,7 +31,12 @@ function SimpleComic({ imageUri, name, updatedAt }: SimpleComicProps) {
 				{name}
 			</ThemedText>
 			<ThemedView className="flex-row items-center">
-				<ThemedMaterialsIcon name="date-range" size={16} className="mr-2" />
+				<ThemedMaterialsIcon
+					primary
+					name="date-range"
+					size={16}
+					className="mr-2"
+				/>
 				<ThemedText subtitle className="text-sm">
 					{updatedAt}
 				</ThemedText>
