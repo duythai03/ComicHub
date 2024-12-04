@@ -23,6 +23,7 @@ import { useFavorite } from "@/contexts/FavoriteContext";
 import Comment from "./Comment";
 import { useUserContext } from "@/contexts/UserContext";
 
+
 export default function ComicScreen() {
   const navigation = useNavigation();
   const route = useRoute();
