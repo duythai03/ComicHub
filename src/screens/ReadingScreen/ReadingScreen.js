@@ -17,7 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Modal, Portal, Button, PaperProvider } from "react-native-paper";
 
 const widthImg = Dimensions.get("window").width;
-const heightImg = Dimensions.get("window").height - 410;
 
 export default function ReadingScreen() {
   const navigation = useNavigation();
@@ -81,11 +80,17 @@ export default function ReadingScreen() {
   const isLoading = isChapterLoading || isImagePagesLoading;
 
   const renderItem = ({ item }) => (
-    <View>
+    <View
+      style={{
+        width: widthImg,
+        aspectRatio: 3 / 5,
+        backgroundColor: "#000",
+      }}
+    >
       <Image
         source={{ uri: `${baseUrlImg}/${item.path}` }}
-        style={{ width: widthImg, height: heightImg }}
-        resizeMode="contain"
+        style={{ flex: 1 }}
+        resizeMode="cover"
       />
     </View>
   );
@@ -95,7 +100,10 @@ export default function ReadingScreen() {
     return (
       <Portal>
         <Modal visible={visible} onDismiss={hideModal}>
-          <View className="flex h-[80%] bg-white mx-3 rounded-lg">
+          <View
+            className="flex h-[80%] mx-3 rounded-lg"
+            style={{ backgroundColor: "white" }}
+          >
             <ScrollView>
               {comic.chapters.content.map((item, index) => (
                 <Button

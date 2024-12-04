@@ -1,4 +1,4 @@
-import { View, ScrollView, TextInput } from "react-native";
+import { View, ScrollView, TextInput, Image } from "react-native";
 import { useEffect, useState } from "react";
 import Entypo from "react-native-vector-icons/Entypo";
 import Slider from "../components/Slider";
@@ -11,6 +11,7 @@ import LoadingCircle from "../components/LoadingCircle";
 import { useNavigation } from "@react-navigation/native";
 import ComicList from "@/components/ComicList";
 import SearchInput from "@/components/SearchInput";
+import advertising1 from "../../assets/advertising1.jpeg";
 
 export default function HomeScreen() {
   const [truyenMoi, setTruyenMoi] = useState([]);
@@ -26,6 +27,7 @@ export default function HomeScreen() {
   const [ActionTotalPage, setActionTotalPage] = useState(0);
   const { isDarkMode } = useTheme();
   const theme = isDarkMode ? darkTheme : lightTheme;
+  const [advertising, setAdvertising] = useState(true);
 
   const navigation = useNavigation();
 
@@ -109,7 +111,7 @@ export default function HomeScreen() {
     isActionLoading;
 
   return (
-    <View className="flex-1" style={theme.container}>
+    <View className="flex-1 relative" style={theme.container}>
       <ScrollView className="mx-2" showsVerticalScrollIndicator={false}>
         <View className="flex-row justify-between items-center">
           <SearchInput />
@@ -150,6 +152,31 @@ export default function HomeScreen() {
           </>
         )}
       </ScrollView>
+      {advertising && (
+        <View
+          className="h-[500] w-11/12 absolute m-auto"
+          style={{
+            borderRadius: 15,
+            overflow: "hidden",
+            top: "17%",
+            left: "4%",
+          }}
+        >
+          <Image
+            source={advertising1}
+            className="w-full h-full"
+            resizeMode="cover"
+          />
+          <View className="absolute right-1 top-3">
+            <Entypo
+              name="cross"
+              size={40}
+              color="#fff"
+              onPress={() => setAdvertising(false)}
+            />
+          </View>
+        </View>
+      )}
     </View>
   );
 }
