@@ -24,9 +24,13 @@ export default function ComicList2({ data, totalPage }) {
 							<ThemedText className="text-lg font-semibold">
 								{item.name}
 							</ThemedText>
-							<ThemedText className="text-sm">
-								Chap mới nhất: {item.newChapters[0].chapter}
-							</ThemedText>
+							{item.newChapters.length === 0 ? (
+								<ThemedText className="text-sm">Chuẩn bị ra mắt</ThemedText>
+							) : (
+								<ThemedText className="text-sm">
+									Chap mới nhất: {item.newChapters[0].chapter}
+								</ThemedText>
+							)}
 							<LinearGradient
 								colors={["#c226f1", "#9e30ec"]}
 								start={{ x: 0, y: 0 }}
