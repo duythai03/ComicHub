@@ -23,7 +23,6 @@ import { useFavorite } from "@/contexts/FavoriteContext";
 import Comment from "./Comment";
 import { useUserContext } from "@/contexts/UserContext";
 
-
 export default function ComicScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -171,8 +170,9 @@ export default function ComicScreen() {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("Reading", {
-                  comic,
-                  chapter: comicDetail?.chapters.content[0],
+                  comic: comicDetail,
+                  chapter: comicDetail?.chapters?.content[0],
+                  index: 0,
                 })
               }
               className="flex justify-center items-center"
